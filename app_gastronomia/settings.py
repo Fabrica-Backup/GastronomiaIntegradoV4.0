@@ -43,20 +43,10 @@ INSTALLED_APPS = [
     'rest_framework',
 
 # Local Apps
-    'aulas',
-    'aulas_ingredientes',
-    'aulas_receitas',
     'categorias',
     'classificacoes',
     'conversoes',
-    'ingredientes',
-    'receitas',
-    'receitas_ingredientes',
     'unidades_medida',
-    'main_app',
-    'main_app_aulas',
-    'main_app_index',
-    'main_app_receitas',
     'relacionamentos',
     
 ]
@@ -97,10 +87,15 @@ WSGI_APPLICATION = 'app_gastronomia.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'many',
+        'USER': 'root',
+        'PASSWORD': 'mysqlrootpassword',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
+
 
 
 # Password validation

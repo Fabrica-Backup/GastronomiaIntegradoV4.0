@@ -33,6 +33,7 @@ class Receita (models.Model):
 #aula
 class Aula (models.Model):
     id_aula = models.AutoField(primary_key = True)
+    nome_aula = models.CharField(max_length = 200)
     data_aula = models.DateField(default='01 de janeiro de 2000', null = True)
     descricao_aula = models.CharField(max_length = 200)
     aula_agendada = models.BooleanField(default= True)

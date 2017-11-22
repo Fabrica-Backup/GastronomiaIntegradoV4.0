@@ -160,7 +160,7 @@ class EditReceitaSerializer(serializers.ModelSerializer):
             'id_categoria',
             'id_classificacao',
             'nome_receita',
-            'modo_preparo_receita'
+            'modo_preparo_receita',
             'ingredientes',
         ]
 
@@ -186,6 +186,7 @@ class CreateAulaSerializer(serializers.ModelSerializer):
         model = Aula
         fields = [
             'id_aula',
+            'nome_aula',
             'data_aula',
             'descricao_aula',
             'aula_agendada',
@@ -204,6 +205,7 @@ class ListAulaSerializer(serializers.ModelSerializer):
         model = Aula
         fields = [
             'id_aula',
+            'nome_aula',
             'data_aula',
             'descricao_aula',
             'aula_agendada',
@@ -219,6 +221,7 @@ class EditAulaSerializer(serializers.ModelSerializer):
         model = Aula
         fields = [
             'id_aula',
+            'nome_aula',
             'data_aula',
             'descricao_aula',
             'aula_agendada',

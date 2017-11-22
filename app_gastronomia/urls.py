@@ -11,10 +11,10 @@ urlpatterns = [
     url(r'^api/categoria/', include('categorias.urls')),
     url(r'^api/classificacao/', include('classificacoes.urls')),
     #url(r'^api/receita/', include('receitas.urls')),
-    url(r'^estoque', include('main_app.urls')),
-    url(r'', include('main_app_aulas.urls')),
-    url(r'', include('main_app_index.urls')),
-    url(r'', include('main_app_receitas.urls')),
+    #url(r'^estoque', include('main_app.urls')),
+    #url(r'', include('main_app_aulas.urls')),
+    #url(r'', include('main_app_index.urls')),
+    #url(r'', include('main_app_receitas.urls')),
     url(r'^api/', include('relacionamentos.urls')),
     
    
