@@ -1,29 +1,27 @@
 ﻿// ==================== GET ===================== //
-$(document).ready(function () {
-    // armazena os objetos json de receitas, aulas, e unidade para ser usado em outros locais
-    window.jsonReceita;
-    window.jsonAula;
-    window.jsonAulaReceita;
+// armazena os objetos json de receitas, aulas, e unidade para ser usado em outros locais
+window.jsonReceita;
+window.jsonAula;
+window.jsonAulaReceita;
 
-    // verifica se foi dado get das receitas, aulas e periodo, caso nao tenha dado ele dará get aqui
-    if (typeof jsonAula === 'undefined' || typeof jsonReceita === 'undefined' || typeof jsonPeriodo === 'undefined') {
-        // get da tabela de aulas 
-        $.getJSON(listAula, function (jsonObjectAula) {
-            jsonAula = jsonObjectAula;
-            // get da tabela de receitas
-            $.getJSON(listReceita, function (jsonObjectReceita) {
-                jsonReceita = jsonObjectReceita;
-                // get da tabela associativa aula_receita
-                $.getJSON(listAulaReceita, function (jsonObjectAulaReceita) {
-                    jsonAulaReceita = jsonObjectAulaReceita;
-                    getTabela(jsonAula, jsonReceita, jsonAulaReceita);
-                })
+// verifica se foi dado get das receitas, aulas e periodo, caso nao tenha dado ele dará get aqui
+if (typeof jsonAula === 'undefined' || typeof jsonReceita === 'undefined' || typeof jsonPeriodo === 'undefined') {
+    // get da tabela de aulas 
+    $.getJSON(listAula, function (jsonObjectAula) {
+        jsonAula = jsonObjectAula;
+        // get da tabela de receitas
+        $.getJSON(listReceita, function (jsonObjectReceita) {
+            jsonReceita = jsonObjectReceita;
+            // get da tabela associativa aula_receita
+            $.getJSON(listAulaReceita, function (jsonObjectAulaReceita) {
+                jsonAulaReceita = jsonObjectAulaReceita;
+                getTabela(jsonAula, jsonReceita, jsonAulaReceita);
             })
         })
-    } else {
-        getTabela(jsonAula, jsonReceita, jsonAulaReceita);
-    }
-})
+    })
+} else {
+    getTabela(jsonAula, jsonReceita, jsonAulaReceita);
+}
 
 function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
     // geração de botoes
@@ -37,7 +35,7 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
         $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
             if (valAula.id_aula == valueAulaReceitas.id_aula) {
                 // conta o numero de receitas na aula
-                var countReceitas = Object.keys(valueAulaReceitas.receita).length;
+                var countReceitas = Object.keys(valAula.receitas).length;
 
                 // cria a 'tr' de cada aula para ficar em formato de lista
                 var htmlList = $('<tr class="id-aula" data-id="' + valAula.id_aula + '"></tr>');
@@ -54,18 +52,18 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
                 $(botaoExcluir).appendTo(htmlList);
 
                 // se aula_agendada = false, a aula NAO ESTA agendada
-                if (valAula.aula_agendada == "false") {
+                if (valAula.aula_agendada == false) {
                     $(botaoEditar).appendTo(htmlList);
                     $(botaoAgendarAula).appendTo(htmlList);
                     $(htmlList).appendTo('.listaAulasPlanejadas');
                 }
                 // se aula_agendada = true, aula ESTA planejada
-                if (valAula.aula_agendada == "true" && valAula.aula_concluida == "false") {
+                if (valAula.aula_agendada == true && valAula.aula_concluida == false) {
                     $(botaoAulaConcluida).appendTo(htmlList);
                     $(htmlList).appendTo('.listaAulasAgendadas');
                 }
                 // se aula_agendada = true E se aula_concluida = true, aula ESTA CONCLUIDA
-                if (valAula.aula_agendada == "true" && valAula.aula_concluida == "true") {
+                if (valAula.aula_agendada == true && valAula.aula_concluida == true) {
                     // .aulaConcluidaList esta localizado em aulas-concluidas.html
                     $(htmlList).appendTo('.aulaConcluidaList');
                 }
@@ -77,7 +75,8 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
 // ===================== POST PUT ===================== //
 // chamado na validacao_receitas_da_aula.js
 function jsonPost() {
-    var form = $('#form_addAula');
+    var formAula = $('#form_addAula');
+    var isUpdate = false;
 
     // pega id da aula (se vazio = POST, se tem algo = PUT)
     idData = $(this).closest('form').find('.id_aula').val();
@@ -88,20 +87,96 @@ function jsonPost() {
         var urlData = createAula;
     } else {
         var urlData = updateAula;
+        isUpdate = true;
     }
-
+    console.log(formAula.serialize())
     $.ajax({
         type: "POST",
         url: urlData,
         dataType: "json",
-        data: form.serialize(),
+        data: formAula.serialize(),
         success: function () {
-            $('#mensagens-sucesso').append('DEU CERTO PORRA!!');
+            if (isUpdate == false) {
+                console.log('criou aula | isUpdate == false');
+            }
+            if (isUpdate == true) {
+                console.log('criou aula | isUpdate == true');
+                idCount(idData);
+            }
         },
         error: function () {
-            $('#mensagens-erro').append('AFFE CAGO!!');
+            console.log("problemas ao criar aula");
+            $('#mensagens-erro').append('Problemas ao criar aula');
         },
     });
+
+    // Conta o numero de ocorrencias da Id
+    function idCount(idData) {
+        $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
+            var countAulaReceitas = Object.keys(valueAulaReceitas.id_aulaReceita).length;
+        })
+
+        var idOcurrence = 0;
+        for (var i = 0; i < countAulaReceitas; i++) {
+            if (jsonAulaReceita.id_aula == idData) {
+                idOcurrence++;
+            }
+        }
+        return removeReceita(idOcurrence);
+    }
+
+    // Remove todas as associaçoes da aula especifica
+    function removeReceita(ocorrencias) {
+        var id_aulaReceita = 0;
+        $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
+            id_aulaReceita = valueAulaReceitas.id_aulaReceita;
+            while (valueAulaReceitas.id_aula == idData) {
+                function removeLoop() {
+                    $.ajax(deleteAulaReceita, {
+                        type: 'DELETE',
+                        data: {
+                            "id_aulaReceita": id_aulaReceita
+                        },
+                        dataType: 'json',
+                        success: function () {
+                            console.log("Receita da associativa removido");
+                            removeLoop();
+                        },
+                        error: function () {
+                            console.log("Problemas para remover as receitas da associativa");
+                            return adicionaReceita();
+                        },
+                    })
+                }
+            }
+        })
+    }
+
+    // Adiciona todas as Receitas da aula
+    function adicionaReceita() {
+        $('input[class="eachReceitaAula"]').each(function () {
+            var id_receita = $(this).val();
+            var quantidade_receita = $(this).val();
+            console.log(id_receita, "se pegou id da receita OK");
+            receita = {}
+            receita["id_aula"] = idData;
+            receita["id_receita"] = id_receita;
+            receita["quantidade_receita"] = quantidade_receita;
+
+            $.ajax({
+                type: "POST",
+                url: urlData,
+                dataType: "json",
+                data: receita.serialize(),
+                success: function () {
+                    console.log('inseriu ingrediente');
+                },
+                error: function () {
+                    $('#mensagens-erro').append('Problemas ao adicionar receitas na aula');
+                },
+            });
+        })
+    }
 };
 
 // ===================== MARCAR AULA COMO AGENDADA ===================== //

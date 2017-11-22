@@ -6,13 +6,13 @@ window.listIngrediente = 'http://localhost:8000/api/ingredientes/list/';
 window.listUnidadeMedida = 'http://localhost:8000/api/unidadesmedida/list';
 
 // aula
-window.listAula = '../js/testesJson/testeJsonAula.json';
+window.listAula = 'http://localhost:8000/api/aulas/list';
 
 // receita
-window.listReceita = '../js/testesJson/testeJsonReceitas.json';
+window.listReceita = 'http://localhost:8000/api/receitas/list';
 
 // associativa aula_receita
-window.listAulaReceita = '../js/testesJson/testeJsonAulaReceita.json';
+window.listAulaReceita = 'http://localhost:8000/api/aula_receita/list/';
 
 // ========== LIST fim ========== //
 
@@ -26,7 +26,11 @@ function load_url() {
     window.deleteIngrediente = 'http://localhost:8000/api/ingredientes/delete/' + idData + '';
 
     // ========== AULAS ========== //
-    window.createAula = 'http://localhost:3000/aulas';
-    window.updateAula = 'http://localhost:3000/aulas/' + idData + '';
-    window.deleteAula = 'http://httpbin.org/delete' + idData + '';
+    window.createAula = 'http://localhost:8000/api/aulas/create';
+    window.updateAula = 'http://localhost:8000/api/edit/' + idData + '';
+    window.deleteAula = 'http://localhost:8000/api/delete' + idData + '';
+
+    // ========== AULA RECEITA ========== //
+    window.createAulaReceita = 'http://localhost:8000/api/aula_receita/create/';
+    window.deleteAulaReceita = 'http://localhost:8000/api/aula_receita/delete/' + idData + '';
 }

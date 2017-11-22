@@ -78,14 +78,14 @@ function exibeMensagensDeErro(erros) {
 }
 
 // botao Criar Aula criado em modal_add_editar_aulas.js
-$('#form_addAula').on('click', '#saveButton', function () {
+$('#addAula').on('click', '#saveButton', function () {
     limpaMensagens();
-    var qtdAlunos = $('.qtdAlunos').val();
-    if (isNaN(qtdAlunos)) {
-        var li = $("<li>A Quantidade de Alunos deve conter NUMEROS APENAS!</li>");
-        $(li).appendTo('#mensagens-erro');
-        return;
-    }
+    // var qtdAlunos = $('.qtdAlunos').val();
+    // if (isNaN(qtdAlunos)) {
+    //     var li = $("<li>A Quantidade de Alunos deve conter NUMEROS APENAS!</li>");
+    //     $(li).appendTo('#mensagens-erro');
+    //     return;
+    // }
     // jsonPost() esta em ajaxTabelaAulas.js
     jsonPost();
 })

@@ -3,7 +3,7 @@ window.form_addAula = $('#form_addAula');
 window.jsonAulaReceita;
 window.jsonIngrediente;
 // ========== MODAL EDITAR AULA ========== //
-$('.aulas').on('click', '.editar', function() {
+$('.aulas').on('click', '.editar', function () {
     // abre modal
     $('#addAula').modal('show');
     limpaMensagens();
@@ -25,7 +25,7 @@ $('.aulas').on('click', '.editar', function() {
     var htmlTurno = '<select class="form-control periodo_aula" name="periodo_aula" style="width: 100%;"><option value="Manhã">Manhã</option><option value="Noite">Noite</option></select>';
 
     // roda a lista de aulas e verifica com a id pego na 'tr'
-    $.each(jsonAula, function(indexAula, valAula) {
+    $.each(jsonAula, function (indexAula, valAula) {
         if (valAula.id_aula == idAula) {
             // header da modal (mostrar o dia da aula)
             var htmlHeader = '<h4 class="modal-title">Editar aula do dia ' + valAula.data_aula + '</h4>'
@@ -50,7 +50,7 @@ $('.aulas').on('click', '.editar', function() {
 
             // garante que a tabela de receitas foi carregada
             if (typeof jsonObjectReceita === 'undefined') {
-                $.getJSON('../js/testesJson/testeJsonReceitas.json', function(jsonObjectReceita) {
+                $.getJSON(listReceita, function (jsonObjectReceita) {
                     jsonReceita = jsonObjectReceita;
                     mostraReceitas(idAula);
                 });
@@ -62,7 +62,7 @@ $('.aulas').on('click', '.editar', function() {
 });
 
 // =========== MODAL MARCAR COMO AULA AGENDADA =========== //
-$('.aulas').on('click', '.botaoAgendarAula', function() {
+$('.aulas').on('click', '.botaoAgendarAula', function () {
     // abre modal
     $('#addAula').modal('show');
     limpaMensagens();
@@ -85,7 +85,7 @@ $('.aulas').on('click', '.botaoAgendarAula', function() {
     var htmlTurno = '<select class="form-control periodo_aula" name="periodo_aula" style="width: 100%;"><option value="Manhã">Manhã</option><option value="Noite">Noite</option></select>';
 
     // roda a lista de aulas e verifica com a id pego na 'tr'
-    $.each(jsonAula, function(indexAula, valAula) {
+    $.each(jsonAula, function (indexAula, valAula) {
         if (valAula.id_aula == idAula) {
             // header da modal (mostrar o dia da aula)
             var htmlHeader = '<h4 class="modal-title">Confirmar dados da aula ' + valAula.data_aula + '</h4>'
@@ -110,7 +110,7 @@ $('.aulas').on('click', '.botaoAgendarAula', function() {
 
             // garante que a tabela de receitas foi carregada
             if (typeof jsonObjectReceita === 'undefined') {
-                $.getJSON('../js/testesJson/testeJsonReceitas.json', function(jsonObjectReceita) {
+                $.getJSON(listReceita, function (jsonObjectReceita) {
                     jsonReceita = jsonObjectReceita;
                     // mostraReceitas(idAula) vem do modal-add-editar-aulas.js
                     mostraReceitas(idAula);
@@ -135,15 +135,15 @@ $('.aulas').on('click', '.botaoAgendarAula', function() {
 function mostraReceitas(idAula) {
     var htmlDelIngButton = '<td class="botao-excluir"><button type="button" class="excluir">Excluir</button></td>';
 
-    $.map(jsonAulaReceita, function(valAulaReceita) {
+    $.map(jsonAulaReceita, function (valAulaReceita) {
         if (idAula == valAulaReceita.id_aula) {
-            $.map(valAulaReceita.receita, function(valAulaReceita_Receita) {
+            $.map(valAulaReceita.receita, function (valAulaReceita_Receita) {
 
-                $.each(jsonReceita, function(indexReceita, valReceita) {
+                $.each(jsonReceita, function (indexReceita, valReceita) {
                     if (valAulaReceita_Receita.id_receita == valReceita.id_receita) {
                         var htmlListReceitas = $('<tr data-id="' + valReceita.id_receita + '"></tr>');
-                        $('<td class="info-nome"><input hidden="" type="text" name="lista_ingrediente.nome_ingrediente" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
-                        $('<td class="info-unidade"><input hidden="" type="text" name="lista_ingrediente.quantidade_receita" value="' + valAulaReceita_Receita.quantidade_receita + '"><p>' + valAulaReceita_Receita.quantidade_receita + '</p></td>').appendTo(htmlListReceitas);
+                        $('<td class="info-nome"><input class="eachReceitaAula" hidden="" type="text" name="nome_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
+                        $('<td class="info-unidade"><input hidden="" type="text" name="quantidade_receita" value="' + valAulaReceita_Receita.quantidade_receita + '"><p>' + valAulaReceita_Receita.quantidade_receita + '</p></td>').appendTo(htmlListReceitas);
                         $(htmlDelIngButton).appendTo(htmlListReceitas);
 
                         // joga na tela
@@ -167,9 +167,8 @@ function mostraReceitas(idAula) {
 }
 
 // ========== MODAL ADICIONAR AULA ========== //
-$('#addAulaBtn').on('click', function() {
-    // chama a modal
-    $('#addAula').modal('show');
+$('#addAulaBtn').on('click', function () {
+
     limpaMensagens();
     // limpa a lista de receitas (nao acumular apertando editar varias vezes)
     $('.tabela_receita tr').remove();
@@ -180,12 +179,14 @@ $('#addAulaBtn').on('click', function() {
 
     var htmlIdAula = '<input name="id_aula" class="id_aula" hidden value=""></input>'
     var htmlNomeAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula"></input>'
-    var htmlDiaDaAula = '<input type="text" name="dia_da_aula" class="form-control" id="datepicker" placeholder="dd/mm/yy">';
+    var htmlDescricaoAula = '<input name="descricao_aula" class="form-control" placeholder="Descrição da Aula"></input>'
+    var htmlDiaDaAula = '<input type="text" name="data_aula" class="form-control" id="datepicker" placeholder="dd/mm/yy">';
     var htmlTurno = '<select class="form-control periodo_aula" name="periodo_aula" style="width: 100%;"><option value="Manhã">Manhã</option><option value="Noite">Noite</option></select>';
     var htmlNumReceitas = '<input type="text" class="form-control" id="numero_de_receitas" placeholder="Nº de Receitas" value="">';
 
     form_addAula.find('.idAula').html(htmlIdAula);
     form_addAula.find('.nome_aula').html(htmlNomeAula);
+    form_addAula.find('.descricao_aula').html(htmlDescricaoAula);
     form_addAula.find('.data').html(htmlDiaDaAula);
     form_addAula.find('.turno').html(htmlTurno);
     form_addAula.find('.numReceitas').html(htmlNumReceitas);
@@ -199,11 +200,13 @@ $('#addAulaBtn').on('click', function() {
     htmlButtonArr.push('<button type="button" id="saveButton" class="btn btn-success pull-right">Planejar Aula</button>');
     // imprime a array no rodape (cancelar e agendar)
     $('.rodape').html(htmlButtonArr);
-    return
+
+    // chama a modal
+    $('#addAula').modal('show');
 });
 
 // ==================== MODAL DETALHES DA AULA ==================== //
-$('.aulas').on('click', '.botaoDetalhes', function() {
+$('.aulas').on('click', '.botaoDetalhes', function () {
     // var nomeReceita é usado para converter id_reecita para nome_receita
     var nomeReceita;
 
@@ -217,12 +220,12 @@ $('.aulas').on('click', '.botaoDetalhes', function() {
     $('.receitasQuantidade tr').remove();
 
     // Header da modal
-    $.each(jsonAulaReceita, function(indexAulaReceita, valAulaReceita) {
+    $.each(jsonAulaReceita, function (indexAulaReceita, valAulaReceita) {
         if (idAula == valAulaReceita.id_aula) {
             var trIdAula = '<tr hidden data-id="' + valAulaReceita.id_aula + '"></tr>';
             $('.receitasQuantidade').append(trIdAula);
 
-            $.each(jsonAula, function(indexAula, valAula) {
+            $.each(jsonAula, function (indexAula, valAula) {
                 if (valAula.id_aula == valAulaReceita.id_aula) {
                     // header dos detalhes da aula
                     var htmlDataAula = '<h4 class="modal-title">Aula do dia ' + valAula.data_aula + '</h4>'
@@ -234,9 +237,9 @@ $('.aulas').on('click', '.botaoDetalhes', function() {
 
     // verifica se foi dado get das receitas, caso nao tenha dado ele dará get aqui
     if (typeof jsonReceita === 'undefined' || typeof jsonAulaReceita === 'undefined') {
-        $.getJSON('../js/testesJson/testeJsonReceitas.json', function(jsonObjectReceita) {
+        $.getJSON(listReceita, function (jsonObjectReceita) {
             jsonReceita = jsonObjectReceita;
-            $.getJSON('../js/testesJson/testeJsonAulaReceita.json', function(jsonObjectAulaReceita) {
+            $.getJSON('../js/testesJson/testeJsonAulaReceita.json', function (jsonObjectAulaReceita) {
                 jsonAulaReceita = jsonObjectAulaReceita;
                 aulaDetalhe()
             })
@@ -245,10 +248,10 @@ $('.aulas').on('click', '.botaoDetalhes', function() {
     aulaDetalhe()
 
     function aulaDetalhe() {
-        $.map(jsonAulaReceita, function(valAulaReceita) {
+        $.map(jsonAulaReceita, function (valAulaReceita) {
             if (idAula == valAulaReceita.id_aula) {
-                $.map(valAulaReceita.receita, function(valAulaReceita_Receita) {
-                    $.each(jsonReceita, function(indexReceita, valReceita) {
+                $.map(valAulaReceita.receita, function (valAulaReceita_Receita) {
+                    $.each(jsonReceita, function (indexReceita, valReceita) {
                         if (valAulaReceita_Receita.id_receita == valReceita.id_receita) {
                             nomeReceita = valReceita.nome_receita;
 
@@ -269,8 +272,8 @@ $('.aulas').on('click', '.botaoDetalhes', function() {
 })
 
 // =========== GET RECEITAS para selecionar ===========
-$.getJSON('../js/testesJson/testeJsonReceitas.json', function(receitaList) {
-    var listaReceitas = $.map(receitaList, function(receita, id) {
+$.getJSON(listReceita, function (receitaList) {
+    var listaReceitas = $.map(receitaList, function (receita, id) {
 
         $('#receitas').append($('<option>', {
             value: receita.id_receita,
