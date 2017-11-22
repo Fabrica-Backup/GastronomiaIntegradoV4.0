@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'conversoes',
     'unidades_medida',
     'relacionamentos',
+    'main_app',
     
 ]
 

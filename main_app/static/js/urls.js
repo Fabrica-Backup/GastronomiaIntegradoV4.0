@@ -6,13 +6,13 @@ window.listIngrediente = 'http://localhost:8000/api/ingredientes/list/';
 window.listUnidadeMedida = 'http://localhost:8000/api/unidadesmedida/list';
 
 // aula
-window.listAula = "{% static 'testesJson/testeJsonAula.json' %}";
+window.listAula = '../js/testesJson/testeJsonAula.json';
 
 // receita
-window.listReceita = "{% static 'testesJson/testeJsonReceitas.json' %}";
+window.listReceita = '../js/testesJson/testeJsonReceitas.json';
 
 // associativa aula_receita
-window.listAulaReceita = "{% static 'testesJson/testeJsonAulaReceita.json' %}";
+window.listAulaReceita = '../js/testesJson/testeJsonAulaReceita.json';
 
 // ========== LIST fim ========== //
 
@@ -29,8 +29,4 @@ function load_url() {
     window.createAula = 'http://localhost:3000/aulas';
     window.updateAula = 'http://localhost:3000/aulas/' + idData + '';
     window.deleteAula = 'http://httpbin.org/delete' + idData + '';
-
-    // ========== AULA_RECEITA ========== //
-    window.updateAulaReceita = "{% static 'testesJson/testeJsonAulaReceita.json' %}";
-    window.deleteAulaReceita = "";
 }
