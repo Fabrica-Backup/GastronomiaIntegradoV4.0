@@ -47,7 +47,7 @@ class EditAula(APIView):
         serializer = self.serializer_class(Aula.objects.get(id_aula=id))
         return Response(serializer.data)
 
-    def put(self, request, id, format=None):
+    def post(self, request, id, format=None):
         serializer = self.serializer_class(Aula.objects.get(id_aula=id), data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -105,11 +105,13 @@ class EditIngrediente(APIView):
         serializer = self.serializer_class(Ingrediente.objects.get(id_ingrediente=id))
         return Response(serializer.data)
 
-    def put(self, request, id, format=None):
+    def post(self, request, id, format=None):
         serializer = self.serializer_class(Ingrediente.objects.get(id_ingrediente=id), data=request.data)
         if serializer.is_valid():
+            print("serializer ok")
             serializer.save()
             return Response(serializer.data)
+        print("serializer bugado")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteIngrediente(APIView):
@@ -161,7 +163,7 @@ class EditReceita(APIView):
         serializer = self.serializer_class(Receita.objects.get(id_receita=id))
         return Response(serializer.data)
 
-    def put(self, request, id, format=None):
+    def post(self, request, id, format=None):
         serializer = self.serializer_class(Receita.objects.get(id_receita=id), data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -182,60 +184,6 @@ class DeleteReceita(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-'''# view aula ingrediente 
-class CreateAulaIngrediente(APIView):
-    queryset = AulaIngrediente.objects.all()
-    serializer_class = AulaIngredienteSerializer
-    #permission_classes = (IsAuthenticated,)
-
-    def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ListAulaIngrediente(APIView):
-    queryset = AulaIngrediente.objects.all()
-    serializer_class = AulaIngredienteSerializer
-    #permission_classes = (IsAuthenticated,)
-    
-    
-    def get(self, request, format=None):
-        serializer = self.serializer_class(AulaIngrediente.objects.all(), many=True)
-        return Response(serializer.data)
-
-
-class EditAulaIngrediente(APIView):
-    queryset = AulaIngrediente.objects.all()
-    serializer_class = AulaIngredienteSerializer
-    #permission_classes = (IsAuthenticated,)
-
-    def get(self, request, id, format=None):
-        serializer = self.serializer_class(AulaIngrediente.objects.get(id_aula_ingrediente=id))
-        return Response(serializer.data)
-
-    def put(self, request, id, format=None):
-        serializer = self.serializer_class(AulaIngrediente.objects.get(id_aula_ingrediente=id), data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class DeleteAulaIngrediente(APIView):
-    queryset = AulaIngrediente.objects.all()
-    serializer_class = AulaIngredienteSerializer
-    #permission_classes = (IsAuthenticated,)
-
-    def get(self, request, id, format=None):
-        serializer = self.serializer_class(AulaIngrediente.objects.get(id_aula_ingrediente=id))
-        return Response(serializer.data)
-
-    def delete(self, request, id, format=None):
-        AulaIngrediente.objects.get(id_aula_ingrediente=id).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)'''
 
 #view da aula receita 
 class CreateAulaReceita(APIView):
@@ -263,21 +211,6 @@ class ListAulaReceita(APIView):
         return Response(serializer.data)
 
 
-class EditAulaReceita(APIView):
-    queryset = AulaReceita.objects.all()
-    serializer_class = AulaReceitaSerializer
-    
-
-    def get(self, request, id, format=None):
-        serializer = self.serializer_class(AulaReceita.objects.get(id_aula_receita=id))
-        return Response(serializer.data)
-
-    def put(self, request, id, format=None):
-        serializer = self.serializer_class(AulaReceita.objects.get(id_aula_receita=id), data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteAulaReceita(APIView):
     queryset = AulaReceita.objects.all()
@@ -317,22 +250,6 @@ class ListReceitaIngrediente(APIView):
         serializer = self.serializer_class(ReceitaIngrediente.objects.all(), many=True)
         return Response(serializer.data)
 
-
-class EditReceitaIngrediente(APIView):
-    queryset = ReceitaIngrediente.objects.all()
-    serializer_class = ReceitaIngredienteSerializer
-    
-
-    def get(self, request, id, format=None):
-        serializer = self.serializer_class(ReceitaIngrediente.objects.get(id_receita_ingrediente=id))
-        return Response(serializer.data)
-
-    def put(self, request, id, format=None):
-        serializer = self.serializer_class(ReceitaIngrediente.objects.get(id_receita_ingrediente=id), data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteReceitaIngrediente(APIView):
     queryset = ReceitaIngrediente.objects.all()
