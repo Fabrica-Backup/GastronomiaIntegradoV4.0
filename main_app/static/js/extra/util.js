@@ -1,7 +1,7 @@
 // Chama calendario // planejar-aulas.html
 function chamaDatePicker() {
     $("#datepicker").datepicker({
-        dateFormat: 'dd/mm/yy',
+        dateFormat: 'yy-mm-dd',
         minDate: 0
     });
 }

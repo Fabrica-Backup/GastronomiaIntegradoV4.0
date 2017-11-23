@@ -23,8 +23,10 @@ class CreateAula(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
+            print("CreateAula serializer OK")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print("CreateAula serializer CAGOU")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
