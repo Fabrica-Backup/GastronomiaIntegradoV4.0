@@ -12,9 +12,10 @@ $("#btnAddReceita").click(function (event) {
     var erros = validaReceita(receita);
     if (erros.length > 0) {
         exibeMensagensDeErro(erros);
-        return;
+    } else {
+        $('.tabela_receita').append(htmlLinha);
     }
-    return $('.tabela_receita').append(htmlLinha);
+
 });
 
 // BOTAO REMOVE RECEITA DA AULA
@@ -49,9 +50,9 @@ function obtemReceitaDoFormulario(formAdicionarReceita) {
 // VALIDAÇAO DA RECEITA
 function validaReceita(receita) {
     var erros = [];
-    var idx = $.inArray(receita.id, receitaArray);
+    var idx = $.inArray(parseInt(receita.id), receitaArray);
 
-    if (document.getElementById("receitas").selectedIndex == "0" || document.getElementById("receitas").value == "0") {
+    if (document.getElementById("receitas").selectedIndex == 0 || document.getElementById("receitas").value == 0) {
         erros.push("SELECIONE uma receita");
     }
     if (idx != -1) {
@@ -63,8 +64,9 @@ function validaReceita(receita) {
     if (isNaN(receita.quantidade)) {
         erros.push("A quantidade de receitas deve conter NUMERCOS APENAS");
     }
-    if (idx == -1 && receita.quantidade != 0 && !isNaN(receita.quantidade) && document.getElementById("receitas").selectedIndex != "0") {
+    if (idx == -1 && receita.quantidade != 0 && !isNaN(receita.quantidade) && document.getElementById("receitas").selectedIndex != 0) {
         receitaArray.push(receita.id);
+        console.log(receitaArray)
         erros.length = 0;
     }
     return erros;
@@ -73,19 +75,6 @@ function validaReceita(receita) {
 function exibeMensagensDeErro(erros) {
     $.each(erros, function (index, erro) {
         var li = $("<li>" + erro + "</li>");
-        $(li).appendTo('#mensagens-erro');
+        $(li).appendTo('#mensagens-erro-aula');
     });
 }
-
-// botao Criar Aula criado em modal_add_editar_aulas.js
-$('#addAula').on('click', '#saveButton', function () {
-    limpaMensagens();
-    // var qtdAlunos = $('.qtdAlunos').val();
-    // if (isNaN(qtdAlunos)) {
-    //     var li = $("<li>A Quantidade de Alunos deve conter NUMEROS APENAS!</li>");
-    //     $(li).appendTo('#mensagens-erro');
-    //     return;
-    // }
-    // jsonPost() esta em ajaxTabelaAulas.js
-    jsonPost();
-})

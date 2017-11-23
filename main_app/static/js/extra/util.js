@@ -21,4 +21,8 @@ function limpaMensagens() {
 
     // nova-receita.html
     $('#mensagens-ing-receita-erro').empty();
+
+    // planejar-aulas.html
+    $('#mensagens-erro-aula').empty();
+    $('#mensagens-sucesso-aula').empty();
 }

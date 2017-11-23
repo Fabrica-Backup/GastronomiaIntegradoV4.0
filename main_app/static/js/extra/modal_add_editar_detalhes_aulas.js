@@ -4,6 +4,9 @@ window.jsonAulaReceita;
 window.jsonIngrediente;
 // ========== MODAL EDITAR AULA ========== //
 $('.aulas').on('click', '.editar', function () {
+    // corrige o botao para "Salvar" da modal editar aula
+    window.btnAgendar = false;
+
     // abre modal
     $('#addAula').modal('show');
     limpaMensagens();
@@ -34,10 +37,14 @@ $('.aulas').on('click', '.editar', function () {
             var htmlIdAula = '<li class="id_aula" hidden data-id="' + valAula.id_aula + '"></li>';
             var htmlDiaDaAula = '<input type="text" name="data_aula" class="form-control" id="datepicker" value="' + valAula.data_aula + '"></input>';
             var htmlNomeAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula" value="' + valAula.nome_aula + '"></input>'
+            var htmlDescricaoAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula" value="' + valAula.descricao_aula + '"></input>'
+            var htmlNumReceitas = '<input type="text" class="form-control" id="numero_de_receitas" placeholder="Nº de Receitas" value="">';
+            var htmlTurno = '<select class="form-control periodo_aula" name="periodo_aula" style="width: 100%;"><option value="Manhã">Manhã</option><option value="Noite">Noite</option></select>';
 
             form_addAula.find('.idAula').html(htmlIdAula);
             form_addAula.find('.data').html(htmlDiaDaAula);
             form_addAula.find('.nome_aula').html(htmlNomeAula);
+            form_addAula.find('.descricao_aula').html(htmlDescricaoAula);
             form_addAula.find('.turno').html(htmlTurno);
             form_addAula.find('.numReceitas').html(htmlNumReceitas);
             chamaDatePicker();
@@ -63,6 +70,9 @@ $('.aulas').on('click', '.editar', function () {
 
 // =========== MODAL MARCAR COMO AULA AGENDADA =========== //
 $('.aulas').on('click', '.botaoAgendarAula', function () {
+    // corrige o botao para "Agendar Aula" da modal agendar aula
+    window.btnAgendar = true;
+
     // abre modal
     $('#addAula').modal('show');
     limpaMensagens();
@@ -93,10 +103,12 @@ $('.aulas').on('click', '.botaoAgendarAula', function () {
 
             var htmlIdAula = '<input name="id_aula" class="id_aula" hidden value="' + valAula.id_aula + '"></input>';
             var htmlNomeAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula" value="' + valAula.nome_aula + '"></input>'
+            var htmlDescricaoAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula" value="' + valAula.descricao_aula + '"></input>'
             var htmlDiaDaAula = '<input type="text" name="data_aula" class="form-control" id="datepicker" value="' + valAula.data_aula + '"></input>';
 
             form_addAula.find('.idAula').html(htmlIdAula);
             form_addAula.find('.nome_aula').html(htmlNomeAula);
+            form_addAula.find('.descricao_aula').html(htmlDescricaoAula);
             form_addAula.find('.data').html(htmlDiaDaAula);
             form_addAula.find('.turno').html(htmlTurno);
             form_addAula.find('.numReceitas').html(htmlNumReceitas);
@@ -120,14 +132,6 @@ $('.aulas').on('click', '.botaoAgendarAula', function () {
             }
         }
     })
-
-    // cria array de botoes (cancelar e agendar) 
-    var htmlButtonArr = [];
-    // joga os botoes na array
-    htmlButtonArr.push('<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>');
-    htmlButtonArr.push('<button type="button" id="agendarButton" class="btn btn-success pull-right">Agendar Aula</button>');
-    // imprime a array no rodape (cancelar e agendar)
-    $('.rodape').html(htmlButtonArr);
 });
 
 
@@ -137,23 +141,23 @@ function mostraReceitas(idAula) {
 
     $.map(jsonAulaReceita, function (valAulaReceita) {
         if (idAula == valAulaReceita.id_aula) {
-            $.map(valAulaReceita.receita, function (valAulaReceita_Receita) {
 
-                $.each(jsonReceita, function (indexReceita, valReceita) {
-                    if (valAulaReceita_Receita.id_receita == valReceita.id_receita) {
-                        var htmlListReceitas = $('<tr data-id="' + valReceita.id_receita + '"></tr>');
-                        $('<td class="info-nome"><input class="eachReceitaAula" hidden="" type="text" name="nome_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
-                        $('<td class="info-unidade"><input hidden="" type="text" name="quantidade_receita" value="' + valAulaReceita_Receita.quantidade_receita + '"><p>' + valAulaReceita_Receita.quantidade_receita + '</p></td>').appendTo(htmlListReceitas);
-                        $(htmlDelIngButton).appendTo(htmlListReceitas);
+            $.each(jsonReceita, function (indexReceita, valReceita) {
+                if (valAulaReceita.id_receita == valReceita.id_receita) {
 
-                        // joga na tela
-                        $(htmlListReceitas).appendTo('.tabela_receita');
+                    var htmlListReceitas = $('<tr data-id="' + valReceita.id_receita + '"></tr>');
+                    $('<td class="info-nome"><input class="eachReceitaAula" hidden="" type="text" name="nome_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
+                    $('<td class="info-unidade"><input hidden="" type="text" name="quantidade_receita" value="' + valAulaReceita.quantidade_receita + '"><p>' + valAulaReceita.quantidade_receita + '</p></td>').appendTo(htmlListReceitas);
+                    $(htmlDelIngButton).appendTo(htmlListReceitas);
 
-                        // insere id da receita na array para validação (não repetir receita)
-                        receitaArray.push(valReceita.id_receita);
-                    }
-                })
+                    // joga na tela
+                    $(htmlListReceitas).appendTo('.tabela_receita');
+
+                    // receitaArray é criado em validacao_receitas_da_aula.js para não poder incluir receita ja incluso na aula
+                    receitaArray.push(valReceita.id_receita);
+                }
             })
+
         }
     })
 
@@ -161,7 +165,13 @@ function mostraReceitas(idAula) {
     var htmlButtonArr = [];
     // joga os botoes na array
     htmlButtonArr.push('<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>');
-    htmlButtonArr.push('<button type="button" id="agendarButton" class="btn btn-success pull-right">Agendar Aula</button>');
+
+    if (btnAgendar == false) {
+        htmlButtonArr.push('<button type="button" id="saveButton" class="btn btn-success pull-right">Salvar</button>');
+    }
+    if (btnAgendar == true) {
+        htmlButtonArr.push('<button type="button" id="agendarButton" class="btn btn-success pull-right">Agendar Aula</button>');
+    }
     // imprime a array no rodape (cancelar e agendar)
     $('.rodape').html(htmlButtonArr);
 }
@@ -247,21 +257,22 @@ $('.aulas').on('click', '.botaoDetalhes', function () {
     }
     aulaDetalhe()
 
+    // Lista as receitas da aula (ao clicar ver detalhes da aula)
     function aulaDetalhe() {
-        $.map(jsonAulaReceita, function (valAulaReceita) {
+        $.each(jsonAulaReceita, function (indexAulaReceita, valAulaReceita) {
             if (idAula == valAulaReceita.id_aula) {
-                $.map(valAulaReceita.receita, function (valAulaReceita_Receita) {
-                    $.each(jsonReceita, function (indexReceita, valReceita) {
-                        if (valAulaReceita_Receita.id_receita == valReceita.id_receita) {
-                            nomeReceita = valReceita.nome_receita;
 
-                            var htmlListReceitas = $('<tr></tr>');
-                            $('<td class="id_receita"><a href="#" id="hipertextColor">' + nomeReceita + '</a></td>').appendTo(htmlListReceitas);
-                            $('<td class="quantidade_receita">' + valAulaReceita_Receita.quantidade_receita + '</td>').appendTo(htmlListReceitas);
-                            $(htmlListReceitas).appendTo('.receitasQuantidade');
-                        }
-                    })
+                $.each(jsonReceita, function (indexReceita, valReceita) {
+                    if (valAulaReceita.id_receita == valReceita.id_receita) {
+                        nomeReceita = valReceita.nome_receita;
+
+                        var htmlListReceitas = $('<tr></tr>');
+                        $('<td class="id_receita"><a href="#" id="hipertextColor">' + nomeReceita + '</a></td>').appendTo(htmlListReceitas);
+                        $('<td class="quantidade_receita">' + valAulaReceita.quantidade_receita + '</td>').appendTo(htmlListReceitas);
+                        $(htmlListReceitas).appendTo('.receitasQuantidade');
+                    }
                 })
+
             }
         })
         var htmlButtonArr = [];

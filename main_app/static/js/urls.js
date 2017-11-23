@@ -27,8 +27,8 @@ function load_url() {
 
     // ========== AULAS ========== //
     window.createAula = 'http://localhost:8000/api/aulas/create';
-    window.updateAula = 'http://localhost:8000/api/edit/' + idData + '';
-    window.deleteAula = 'http://localhost:8000/api/delete' + idData + '';
+    window.updateAula = 'http://localhost:8000/api/aulas/edit/' + idData + '';
+    window.deleteAula = 'http://localhost:8000/api/aulas/delete/' + idData + '';
 
     // ========== AULA RECEITA ========== //
     window.createAulaReceita = 'http://localhost:8000/api/aula_receita/create/';

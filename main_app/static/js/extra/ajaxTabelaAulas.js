@@ -73,8 +73,7 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
 }
 
 // ===================== POST PUT ===================== //
-// chamado na validacao_receitas_da_aula.js
-function jsonPost() {
+$('#addAula').on('click', '#saveButton', function () {
     var formAula = $('#form_addAula');
     var isUpdate = false;
 
@@ -177,12 +176,11 @@ function jsonPost() {
             });
         })
     }
-};
-
+});
 // ===================== MARCAR AULA COMO AGENDADA ===================== //
-$('#addReceita').on('click', '#agendarButton', function () {
+$('#addAula').on('click', '#agendarButton', function () {
     // pega id da receita
-    idData = $(this).closest('#form_addAula').find('.id_aula').data('id');
+    idData = $(this).closest('#addAula').find('.id_aula').val();
 
     load_url();
 
