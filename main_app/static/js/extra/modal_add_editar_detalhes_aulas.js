@@ -34,7 +34,7 @@ $('.aulas').on('click', '.editar', function () {
             var htmlHeader = '<h4 class="modal-title">Editar aula do dia ' + valAula.data_aula + '</h4>'
             $('.cabecalho').html(htmlHeader);
 
-            var htmlIdAula = '<li class="id_aula" hidden data-id="' + valAula.id_aula + '"></li>';
+            var htmlIdAula = '<li class="id_aula" hidden value="' + valAula.id_aula + '"></li>';
             var htmlDiaDaAula = '<input type="text" name="data_aula" class="form-control" id="datepicker" value="' + valAula.data_aula + '"></input>';
             var htmlNomeAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula" value="' + valAula.nome_aula + '"></input>'
             var htmlDescricaoAula = '<input name="nome_aula" class="form-control" placeholder="Nome da Aula" value="' + valAula.descricao_aula + '"></input>'

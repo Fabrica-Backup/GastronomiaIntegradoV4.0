@@ -31,50 +31,62 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
     var botaoAulaConcluida = '<td><button class="botaoAulaConcluida" type="button">Aula Concluida</button></td>';
     var botaoDetalhes = '<td><button type="button" class="btn btn-xs botaoDetalhes"><i class="fa fa-eye"></i></button></td>';
 
+    // novaId e velhaID sao usados para não passar o foreach de mesma Id 2x (a tabela associativa aula_receita pode ter varias id_aula iguais)
+    var novaId = 0;
+    var velhaId = 0;
+
     $.each(jsonAula, function (indexAula, valAula) {
+        novaId = valAula.id_aula;
+
         $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
-            if (valAula.id_aula == valueAulaReceitas.id_aula) {
+            if (novaId != velhaId) {
                 // conta o numero de receitas na aula
                 var countReceitas = Object.keys(valAula.receitas).length;
 
-                // cria a 'tr' de cada aula para ficar em formato de lista
-                var htmlList = $('<tr class="id-aula" data-id="' + valAula.id_aula + '"></tr>');
+                if (valAula.id_aula == valueAulaReceitas.id_aula || countReceitas == 0) {
+                    // cria a 'tr' de cada aula para ficar em formato de lista
+                    var htmlList = $('<tr class="id-aula" data-id="' + valAula.id_aula + '"></tr>');
 
-                // cria as 'td' com os valores da aula E joga as 'td' dentro da 'tr' htmlList (<tr><td>  </td></tr>)
-                $('<td hidden class="id_aula">' + valAula.id_aula + '</td>').appendTo(htmlList);
-                $('<td class="nome_aula">' + valAula.nome_aula + '</td>').appendTo(htmlList);
-                $('<td class="dia_da_aula">' + valAula.data_aula + '</td>').appendTo(htmlList);
-                $('<td class="periodo">' + valAula.periodo_aula + '</td>').appendTo(htmlList);
-                $('<td class="num_receitas">' + countReceitas + '</td>').appendTo(htmlList);
+                    // cria as 'td' com os valores da aula E joga as 'td' dentro da 'tr' htmlList (<tr><td>  </td></tr>)
+                    $('<td hidden class="id_aula">' + valAula.id_aula + '</td>').appendTo(htmlList);
+                    $('<td class="nome_aula">' + valAula.nome_aula + '</td>').appendTo(htmlList);
+                    $('<td class="dia_da_aula">' + valAula.data_aula + '</td>').appendTo(htmlList);
+                    $('<td class="periodo">' + valAula.periodo_aula + '</td>').appendTo(htmlList);
+                    $('<td class="num_receitas">' + countReceitas + '</td>').appendTo(htmlList);
 
-                // joga os botoes detalhes e excluir dentro da 'tr'
-                $(botaoDetalhes).appendTo(htmlList);
-                $(botaoExcluir).appendTo(htmlList);
+                    // joga os botoes detalhes e excluir dentro da 'tr'
+                    $(botaoDetalhes).appendTo(htmlList);
+                    $(botaoExcluir).appendTo(htmlList);
 
-                // se aula_agendada = false, a aula NAO ESTA agendada
-                if (valAula.aula_agendada == false) {
-                    $(botaoEditar).appendTo(htmlList);
-                    $(botaoAgendarAula).appendTo(htmlList);
-                    $(htmlList).appendTo('.listaAulasPlanejadas');
-                }
-                // se aula_agendada = true, aula ESTA planejada
-                if (valAula.aula_agendada == true && valAula.aula_concluida == false) {
-                    $(botaoAulaConcluida).appendTo(htmlList);
-                    $(htmlList).appendTo('.listaAulasAgendadas');
-                }
-                // se aula_agendada = true E se aula_concluida = true, aula ESTA CONCLUIDA
-                if (valAula.aula_agendada == true && valAula.aula_concluida == true) {
-                    // .aulaConcluidaList esta localizado em aulas-concluidas.html
-                    $(htmlList).appendTo('.aulaConcluidaList');
+                    // se aula_agendada = false, a aula NAO ESTA agendada
+                    if (valAula.aula_agendada == false) {
+                        $(botaoEditar).appendTo(htmlList);
+                        $(botaoAgendarAula).appendTo(htmlList);
+                        $(htmlList).appendTo('.listaAulasPlanejadas');
+                    }
+                    // se aula_agendada = true, aula ESTA planejada
+                    if (valAula.aula_agendada == true && valAula.aula_concluida == false) {
+                        $(botaoAulaConcluida).appendTo(htmlList);
+                        $(htmlList).appendTo('.listaAulasAgendadas');
+                    }
+                    // se aula_agendada = true E se aula_concluida = true, aula ESTA CONCLUIDA
+                    if (valAula.aula_agendada == true && valAula.aula_concluida == true) {
+                        // .aulaConcluidaList esta localizado em aulas-concluidas.html
+                        $(htmlList).appendTo('.aulaConcluidaList');
+                    }
+                    velhaId = novaId;
                 }
             }
         })
+
+
     })
+
 }
 
 // ===================== POST PUT ===================== //
 $('#addAula').on('click', '#saveButton', function () {
-    var formAula = $('#form_addAula');
+    var formAula = $('#addAula');
     var isUpdate = false;
 
     // pega id da aula (se vazio = POST, se tem algo = PUT)
@@ -84,11 +96,14 @@ $('#addAula').on('click', '#saveButton', function () {
 
     if (idData == 0) {
         var urlData = createAula;
+        ///TODO function ajaxADD()
     } else {
         var urlData = updateAula;
         isUpdate = true;
+        /// TODO function idCount()
     }
     console.log(formAula.serialize())
+
     $.ajax({
         type: "POST",
         url: urlData,
