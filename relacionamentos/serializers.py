@@ -79,8 +79,6 @@ class EditReceitaSerializer(serializers.ModelSerializer):
 #serializers da aula 
 class CreateAulaSerializer(serializers.ModelSerializer):
 
-   #ordered_date = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S")
-    data_aula = serializers.DateField(format="%d/%m/%Y")
     receitas = ListReceitaSerializer(many=True, read_only=True)
     class Meta:
         model = Aula
@@ -100,7 +98,6 @@ class CreateAulaSerializer(serializers.ModelSerializer):
 
 class ListAulaSerializer(serializers.ModelSerializer):
     
-    data_aula = serializers.DateField(format="%d/%m/%Y")
     receitas = ListReceitaSerializer(many=True, read_only=True)
     class Meta:
         model = Aula
@@ -117,7 +114,6 @@ class ListAulaSerializer(serializers.ModelSerializer):
 
 class EditAulaSerializer(serializers.ModelSerializer):
     
-    data_aula = serializers.DateField(format="%d/%m/%Y")
     receitas = ListReceitaSerializer(many=True, read_only=True)
     class Meta:
         model = Aula
