@@ -44,16 +44,6 @@ class Aula (models.Model):
 
 
 
-#aula ingrediente tabela de relacionamento entre as outras duas acima
-'''class AulaIngrediente (models.Model):
-    id_aula_ingrediente = models.AutoField(primary_key = True)
-    id_aula = models.ForeignKey('Aula',  on_delete=models.CASCADE)
-    id_ingrediente = models.ForeignKey('Ingrediente',  on_delete=models.CASCADE)
-    quantidade_projetada_aula = models.DecimalField(max_digits = 12, decimal_places = 2, default = 0) 
-    quantidade_utilizada_aula = models.DecimalField(max_digits = 12, decimal_places = 2, default = 0) '''
-
-
-
 #aula receita
 class AulaReceita (models.Model):
     id_aula_receita = models.AutoField(primary_key=True)
