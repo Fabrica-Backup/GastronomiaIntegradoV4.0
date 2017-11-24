@@ -26,7 +26,7 @@ function load_url() {
     window.deleteIngrediente = 'http://localhost:8000/api/ingredientes/delete/' + idData + '';
 
     // ========== AULAS ========== //
-    window.createAula = 'http://localhost:8000/api/aulas/create';
+    window.createAula = 'http://localhost:8000/api/aulas/create/';
     window.updateAula = 'http://localhost:8000/api/aulas/edit/' + idData + '';
     window.deleteAula = 'http://localhost:8000/api/aulas/delete/' + idData + '';
 

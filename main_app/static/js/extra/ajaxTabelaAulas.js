@@ -86,14 +86,16 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
 
 // ===================== POST PUT ===================== //
 $('#addAula').on('click', '#saveButton', function () {
-    var formAula = $('#addAula');
+    var formAula = $('#form_addAula');
     var isUpdate = false;
 
     // pega id da aula (se vazio = POST, se tem algo = PUT)
     idData = $(this).closest('form').find('.id_aula').val();
 
-    load_url();
+    var aulaSerialized = formAula.serializeArray();
 
+    console.log(aulaSerialized)
+    load_url();
     if (idData == 0) {
         var urlData = createAula;
         ///TODO function ajaxADD()
@@ -102,21 +104,14 @@ $('#addAula').on('click', '#saveButton', function () {
         isUpdate = true;
         /// TODO function idCount()
     }
-    console.log(formAula.serialize())
 
     $.ajax({
         type: "POST",
         url: urlData,
         dataType: "json",
-        data: formAula.serialize(),
+        data: aulaSerialized,
         success: function () {
-            if (isUpdate == false) {
-                console.log('criou aula | isUpdate == false');
-            }
-            if (isUpdate == true) {
-                console.log('criou aula | isUpdate == true');
-                idCount(idData);
-            }
+            console.log("oi")
         },
         error: function () {
             console.log("problemas ao criar aula");
