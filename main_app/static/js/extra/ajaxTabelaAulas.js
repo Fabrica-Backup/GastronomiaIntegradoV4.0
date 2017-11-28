@@ -87,7 +87,6 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
 // ===================== POST PUT ===================== //
 $('#addAula').on('click', '#saveButton', function () {
     var formAula = $('#form_addAula');
-    var isUpdate = false;
 
     // pega id da aula (se vazio = POST, se tem algo = PUT)
     idData = $(this).closest('form').find('.id_aula').val();
@@ -98,28 +97,30 @@ $('#addAula').on('click', '#saveButton', function () {
     load_url();
     if (idData == 0) {
         var urlData = createAula;
-        ///TODO function ajaxADD()
+        adicionaAula();
     } else {
         var urlData = updateAula;
-        isUpdate = true;
-        /// TODO function idCount()
+        idCount(idData);
     }
 
-    $.ajax({
-        type: "POST",
-        url: urlData,
-        dataType: "json",
-        data: aulaSerialized,
-        success: function () {
-            console.log("oi")
-        },
-        error: function () {
-            console.log("problemas ao criar aula");
-            $('#mensagens-erro').append('Problemas ao criar aula');
-        },
-    });
+    function adicionaAula(receitaTr) {
+        $.ajax({
+            type: "POST",
+            url: urlData,
+            dataType: "json",
+            data: aulaSerialized,
+            success: function () {
+                $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
+                adicionaReceita(idData, receitaTr);
+            },
+            error: function () {
+                console.log("problemas ao criar aula");
+                $('#mensagens-erro-aula').append('Problemas ao criar aula');
+            },
+        });
+    }
 
-    // Conta o numero de ocorrencias da Id
+    // Conta o numero de ocorrencias da id da aula na tabela associativa
     function idCount(idData) {
         $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
             var countAulaReceitas = Object.keys(valueAulaReceitas.id_aulaReceita).length;
@@ -162,31 +163,69 @@ $('#addAula').on('click', '#saveButton', function () {
     }
 
     // Adiciona todas as Receitas da aula
-    function adicionaReceita() {
-        $('input[class="eachReceitaAula"]').each(function () {
-            var id_receita = $(this).val();
-            var quantidade_receita = $(this).val();
-            console.log(id_receita, "se pegou id da receita OK");
-            receita = {}
-            receita["id_aula"] = idData;
-            receita["id_receita"] = id_receita;
-            receita["quantidade_receita"] = quantidade_receita;
+    function adicionaReceita(idData, receitaTr) {
 
+        // Se idData == 0, CREATE AULA, senao EDIT AULA
+        if (idData == 0) {
+            // lastId == searchLastId(jsonAula, "id_aula");
+            var lastAulaInfo = searchLastId(jsonAula, "id_aula");
+            var idData = lastAulaInfo.id_aula;
+            eachReceita(idData);
+        } else {
+            return eachReceita(idData);
+        }
+
+        // pega a id da aula que acabou de ser criada
+        function searchLastId(arr, prop) {
+            var lastId;
+            for (var i = 0; i < arr.length; i++) {
+                if (!lastId || parseInt(arr[i][prop]) > parseInt(lastId[prop]))
+                    lastId = arr[i];
+            }
+            return lastId;
+        }
+
+        function eachReceita(idData) {
+            var receitaArr = [];
+
+            for (i = 1; i < rec; i++) {
+                // pega a id da receita para enviar pelo ajax
+                var id_receita = $('.eachReceitaAula' + i + '').val();
+                var quantidade_receita = $('.eachQuantidadeReceita' + i + '').val();
+                // var token = $("input[name=csrfmiddlewaretoken]").val();
+
+                receita = {}
+                // receita["csrfmiddlewaretoken"] = token;
+                receita["id_aula"] = idData;
+                receita["id_receita"] = id_receita;
+                receita["quantidade_receita"] = quantidade_receita;
+
+                receitaArr.push(receita);
+            }
+            console.log(receitaArr);
+            console.log(receitaArr.serializeArray());
+            return postReceita(receita);
+        }
+
+        function postReceita(receita) {
             $.ajax({
                 type: "POST",
                 url: urlData,
-                dataType: "json",
-                data: receita.serialize(),
+                data: receita,
+                dataType: 'json',
+                // contentType: "application/json",
                 success: function () {
-                    console.log('inseriu ingrediente');
+                    console.log('inseriu receita');
                 },
                 error: function () {
                     $('#mensagens-erro').append('Problemas ao adicionar receitas na aula');
                 },
             });
-        })
+        }
     }
+
 });
+
 // ===================== MARCAR AULA COMO AGENDADA ===================== //
 $('#addAula').on('click', '#agendarButton', function () {
     // pega id da receita
