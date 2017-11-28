@@ -89,7 +89,7 @@ $('#addAula').on('click', '#saveButton', function () {
     var formAula = $('#form_addAula');
 
     // pega id da aula (se vazio = POST, se tem algo = PUT)
-    idData = $(this).closest('form').find('.id_aula').val();
+    idData = $('#form_addAula').find('.id_aula').val();
 
     var aulaSerialized = formAula.serializeArray();
 
@@ -122,9 +122,13 @@ $('#addAula').on('click', '#saveButton', function () {
 
     // Conta o numero de ocorrencias da id da aula na tabela associativa
     function idCount(idData) {
-        $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
-            var countAulaReceitas = Object.keys(valueAulaReceitas.id_aulaReceita).length;
+        var countAulaReceitas;
+        var stringJson;
+        $.each(jsonAulaReceita, function (index, valueAulaReceitas) {
+            // stringJson = JSON.stringify(valueAulaReceitas.id_aula_receita);
         })
+        countAulaReceitas = Object.keys(stringJson).length;
+        console.log(countAulaReceitas)
 
         var idOcurrence = 0;
         for (var i = 0; i < countAulaReceitas; i++) {
@@ -140,25 +144,25 @@ $('#addAula').on('click', '#saveButton', function () {
         var id_aulaReceita = 0;
         $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
             id_aulaReceita = valueAulaReceitas.id_aulaReceita;
-            while (valueAulaReceitas.id_aula == idData) {
-                function removeLoop() {
-                    $.ajax(deleteAulaReceita, {
-                        type: 'DELETE',
-                        data: {
-                            "id_aulaReceita": id_aulaReceita
-                        },
-                        dataType: 'json',
-                        success: function () {
-                            console.log("Receita da associativa removido");
-                            removeLoop();
-                        },
-                        error: function () {
-                            console.log("Problemas para remover as receitas da associativa");
-                            return adicionaReceita();
-                        },
-                    })
-                }
-            }
+            // while (valueAulaReceitas.id_aula == idData) {
+            //     function removeLoop() {
+            //         $.ajax(deleteAulaReceita, {
+            //             type: 'DELETE',
+            //             data: {
+            //                 "id_aulaReceita": id_aulaReceita
+            //             },
+            //             dataType: 'json',
+            //             success: function () {
+            //                 console.log("Receita da associativa removido");
+            //                 removeLoop();
+            //             },
+            //             error: function () {
+            //                 console.log("Problemas para remover as receitas da associativa");
+            //                 return adicionaReceita();
+            //             },
+            //         })
+            //     }
+            // }
         })
     }
 
@@ -185,37 +189,56 @@ $('#addAula').on('click', '#saveButton', function () {
             return lastId;
         }
 
+        // function eachReceita(idData) {
+        //     // var receitaArr = [];
+
+        //     for (i = 1; i < rec; i++) {
+        //         // pega a id da receita para enviar pelo ajax
+        //         var id_receita = $('.eachReceitaAula' + i + '').val();
+        //         var quantidade_receita = $('.eachQuantidadeReceita' + i + '').val();
+        //         var token = $("input[name=csrfmiddlewaretoken]").val();
+
+        //         receita = {}
+        //         receita["csrfmiddlewaretoken"] = token;
+        //         receita["id_aula"] = idData;
+        //         receita["id_receita"] = id_receita;
+        //         receita["quantidade_receita"] = quantidade_receita;
+
+        //         // receitaArr.push(receita);
+
+        //         postReceita(receita);
+        //     }
+        //     // console.log(receitaArr);
+        //     // return postReceita(receita);
+        // }
+
         function eachReceita(idData) {
-            var receitaArr = [];
 
             for (i = 1; i < rec; i++) {
-                // pega a id da receita para enviar pelo ajax
-                var id_receita = $('.eachReceitaAula' + i + '').val();
-                var quantidade_receita = $('.eachQuantidadeReceita' + i + '').val();
-                // var token = $("input[name=csrfmiddlewaretoken]").val();
-
-                receita = {}
-                // receita["csrfmiddlewaretoken"] = token;
-                receita["id_aula"] = idData;
-                receita["id_receita"] = id_receita;
-                receita["quantidade_receita"] = quantidade_receita;
-
-                receitaArr.push(receita);
+                var receita = $('.form_porco' + i + '').serializeArray();
+                receita.push({
+                    name: 'id_aula',
+                    value: '' + idData + ''
+                })
+                postReceita(receita);
             }
-            console.log(receitaArr);
-            console.log(receitaArr.serializeArray());
-            return postReceita(receita);
         }
 
         function postReceita(receita) {
+            console.log(receita);
+            // var receitaArrParam = $.param(receita)
+            // var paramSerial = $(receitaArrParam).serialize();
+            // console.log(paramSerial)
             $.ajax({
                 type: "POST",
-                url: urlData,
+                url: createAulaReceita,
                 data: receita,
+                // traditional: true,
                 dataType: 'json',
                 // contentType: "application/json",
                 success: function () {
                     console.log('inseriu receita');
+                    return;
                 },
                 error: function () {
                     $('#mensagens-erro').append('Problemas ao adicionar receitas na aula');

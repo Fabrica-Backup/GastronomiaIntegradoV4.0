@@ -6,7 +6,7 @@ $("#btnAddReceita").click(function (event) {
     limpaMensagens();
     var formAdicionarReceita = $('#form_addAula');
     var receita = obtemReceitaDoFormulario(formAdicionarReceita);
-    var htmlLinha = '<tr data-id="' + receita.id + '" class="ig"><td class="info-nome"><input hidden class="eachReceitaAula' + rec + '" type="text" name="id_receita" value="' + receita.id + '" /><p>' + receita.nome + '</p></td><td class="info-quantidade"><input hidden class="eachQuantidadeReceita' + rec + '" type="text" name="quantidade_receita" value="' + receita.quantidade + '" /><p>' + receita.quantidade + '</p></td><td class="botao-excluir">' + receita.excluir + '</td></tr>';
+    var htmlLinha = '<form class="form_porco'+rec+'"><div id="id_aula_receita"></div><tr data-id="' + receita.id + '" class="ig"><td class="info-nome"><input hidden class="eachReceitaAula' + rec + '" type="text" name="id_receita" value="' + receita.id + '" /><p>' + receita.nome + '</p></td><td class="info-quantidade"><input hidden class="eachQuantidadeReceita' + rec + '" type="text" name="quantidade_receita" value="' + receita.quantidade + '" /><p>' + receita.quantidade + '</p></td><td class="botao-excluir">' + receita.excluir + '</td></tr></form>';
 
     var erros = validaReceita(receita);
     if (erros.length > 0) {
