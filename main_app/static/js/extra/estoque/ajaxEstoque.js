@@ -82,7 +82,7 @@ function postJson() {
             }
         })
     }
-    console.log(formArray)
+
     $.ajax({
         type: "POST",
         url: urlData,

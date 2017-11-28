@@ -146,7 +146,7 @@ function mostraReceitas(idAula) {
                 if (valAulaReceita.id_receita == valReceita.id_receita) {
 
                     var htmlListReceitas = $('<tr data-id="' + valReceita.id_receita + '"></tr>');
-                    $('<td class="info-nome"><input class="eachReceitaAula" hidden="" type="text" name="nome_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
+                    $('<td class="info-nome"><input hidden="" type="text" name="id_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
                     $('<td class="info-unidade"><input hidden="" type="text" name="quantidade_receita" value="' + valAulaReceita.quantidade_receita + '"><p>' + valAulaReceita.quantidade_receita + '</p></td>').appendTo(htmlListReceitas);
                     $(htmlDelIngButton).appendTo(htmlListReceitas);
 

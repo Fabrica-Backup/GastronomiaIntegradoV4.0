@@ -375,7 +375,7 @@
                 <div class="modal-body">
                     <ul id="mensagens-erro-aula"></ul>
                     <ul id="mensagens-sucesso-aula"></ul>
-                    <form class="form-horizontal" method="POST" id="form_addAula">
+                    <form class="form-horizontal" method="POST" id="form_addAula">{% csrf_token %}
                         <div class="box-body">
                             <div class="idAula"></div>
                             <input hidden name="aula_agendada" value="false">
@@ -424,7 +424,7 @@
                                 </div>
                             </div>
                     </form>
-                    <form id="form_receitaAula">
+                    <form id="form_receitaAula">{% csrf_token %}
                         <div class="form-group">
                             <div class="col-xs-10 col-sm-10">
                                 <table id="lista_receita" class="table table-bordered table-hover">
@@ -510,6 +510,7 @@
     <script src="{% static '/js/urls.js' %}"></script>
     <!-- jQuery 2.2.3 -->
     <script src="{% static '/js/jquery-2.2.3.min.js' %}"></script>
+
     <!-- Bootstrap 3.3.7 -->
     <script src="{% static '/js/bootstrap.min.js' %}"></script>
     <script src="{% static '/js/app.min.js' %}"></script>
