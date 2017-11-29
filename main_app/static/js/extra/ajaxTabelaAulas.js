@@ -93,6 +93,14 @@ $('#addAula').on('click', '#saveButton', function () {
 
     var aulaSerialized = formAula.serializeArray();
 
+    aulaSerialized.push({
+        name: 'aula_agendada',
+        value: false
+    }, {
+        name: 'aula_concluida',
+        value: false
+    })
+
     console.log(aulaSerialized)
     load_url();
     if (idData == 0) {
@@ -215,20 +223,30 @@ $('#addAula').on('click', '#agendarButton', function () {
 
     load_url();
 
-    var urlData = updateAula;
+    var formAulaSerial = $('#form_addAula').serializeArray();
 
-    $.ajax(urlData, {
+    formAulaSerial.push({
+        name: 'aula_agendada',
+        value: true
+    }, {
+        name: 'aula_concluida',
+        value: false
+    })
+
+    $.ajax(updateAula, {
         type: 'POST',
-        data: {
-            aula_agendada: 'true'
-        },
+        data: formAulaSerial,
         dataType: 'json',
         success: function () {
+            $('#addReceita').modal('hide')
             swal({
                     title: "Aula Agendada com SUCESSO!",
                     type: "success",
-                }),
-                $('#addReceita').modal('hide');
+                },
+                function () {
+                    location.reload();
+                }
+            )
         },
         error: function () {
             swal({
@@ -248,40 +266,72 @@ $('.aulas').on('click', '.botaoAulaConcluida', function () {
 
     load_url();
 
-    var urlData = updateAula;
+    var formAulaSerial = $('#form_addAula').serializeArray();
 
-    swal({
-            title: "Marcar esta aula como Concluida?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim",
-            closeOnConfirm: false,
-        },
-        function () {
-            $.ajax(urlData, {
-                type: 'POST',
-                data: {
-                    aula_concluida: 'true'
-                },
-                dataType: 'json',
-                success: function () {
-                    swal({
-                            title: "Aula Concluida!",
-                            type: "success",
-                        }),
-                        $(thisTr).remove();
-                },
-                error: function () {
-                    swal({
-                        title: "Problemas para concluir a aula",
-                        type: "error",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#DD6B55",
-                    })
-                },
+    $.map(jsonAula, function (valAula) {
+        if (idData == valAula.id_aula) {
+
+            formAulaSerial.push({
+                name: 'nome_aula',
+                value: valAula.nome_aula
+            }, {
+                name: 'descricao_aula',
+                value: valAula.descricao_aula
+            }, {
+                name: 'data_aula',
+                value: valAula.data_aula
+            }, {
+                name: 'periodo_aula',
+                value: valAula.periodo_aula
+            }, {
+                name: 'aula_agendada',
+                value: true
+            }, {
+                name: 'aula_concluida',
+                value: true
             })
+            return aulaConcluida(formAulaSerial);
         }
-    );
+    })
+
+    function aulaConcluida(formAulaSerial) {
+
+        swal({
+                title: "Marcar esta aula como Concluida?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sim",
+                closeOnConfirm: false,
+            },
+            function () {
+                $.ajax(updateAula, {
+                    type: 'POST',
+                    data: formAulaSerial,
+                    dataType: 'json',
+                    success: function () {
+                        $(thisTr).remove();
+                        swal({
+                                title: "Aula Concluida!",
+                                type: "success",
+                            },
+                            function () {
+                                location.reload();
+                            }
+                        )
+                    },
+                    error: function () {
+                        swal({
+                            title: "Problemas para concluir a aula",
+                            type: "error",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#DD6B55",
+                        })
+                    }
+                })
+            }
+        );
+    }
+
 });
 
 // ===================== DELETE ===================== //
@@ -333,12 +383,16 @@ $('#verAula').on('click', '.clonar', function () {
             var objClone = new Object();
             objClone.id_aula = '';
             objClone.nome_aula = valueAula.nome_aula;
+            objClone.descricao_aula = valueAula.descricao_aula;
             objClone.data_aula = '';
             objClone.periodo_aula = valueAula.periodo_aula;
             objClone.aula_concluida = 'false';
             objClone.aula_agendada = 'false';
-            objClone.receitas = [];
 
+            return clonaReceitas(objClone)
+        }
+
+        function clonaReceitas(objClone) {
             $.each(valueAula.receitas, function (indexAulaReceitas, valueAulaReceitas) {
                 objClone.receitas.push(valueAulaReceitas);
             })
