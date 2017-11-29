@@ -103,7 +103,7 @@ $('#addAula').on('click', '#saveButton', function () {
         idCount(idData);
     }
 
-    function adicionaAula(receitaTr) {
+    function adicionaAula() {
         $.ajax({
             type: "POST",
             url: urlData,
@@ -111,7 +111,7 @@ $('#addAula').on('click', '#saveButton', function () {
             data: aulaSerialized,
             success: function () {
                 $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
-                adicionaReceita(idData, receitaTr);
+                adicionaReceita(idData);
             },
             error: function () {
                 console.log("problemas ao criar aula");
@@ -120,54 +120,41 @@ $('#addAula').on('click', '#saveButton', function () {
         });
     }
 
-    // Conta o numero de ocorrencias da id da aula na tabela associativa
+    // chama a funçao deleteReceita() para apagar tudo com id_aula especifica, em seguida chama a funçao adicionaReceita()
     function idCount(idData) {
-        var countAulaReceitas;
-        var stringJson;
-        $.each(jsonAulaReceita, function (index, valueAulaReceitas) {
-            // stringJson = JSON.stringify(valueAulaReceitas.id_aula_receita);
-        })
-        countAulaReceitas = Object.keys(stringJson).length;
-        console.log(countAulaReceitas)
-
-        var idOcurrence = 0;
-        for (var i = 0; i < countAulaReceitas; i++) {
-            if (jsonAulaReceita.id_aula == idData) {
-                idOcurrence++;
+        var idAssoc;
+        $.map(jsonAulaReceita, function (valueAulaReceitas) {
+            if (valueAulaReceitas.id_aula == idData) {
+                idAssoc = valueAulaReceitas.id_aula_receita;
+                return deleteReceita(idAssoc);
             }
-        }
-        return removeReceita(idOcurrence);
+        })
+        return aulaReceita_control(idData);
     }
 
-    // Remove todas as associaçoes da aula especifica
-    function removeReceita(ocorrencias) {
-        var id_aulaReceita = 0;
-        $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
-            id_aulaReceita = valueAulaReceitas.id_aulaReceita;
-            // while (valueAulaReceitas.id_aula == idData) {
-            //     function removeLoop() {
-            //         $.ajax(deleteAulaReceita, {
-            //             type: 'DELETE',
-            //             data: {
-            //                 "id_aulaReceita": id_aulaReceita
-            //             },
-            //             dataType: 'json',
-            //             success: function () {
-            //                 console.log("Receita da associativa removido");
-            //                 removeLoop();
-            //             },
-            //             error: function () {
-            //                 console.log("Problemas para remover as receitas da associativa");
-            //                 return adicionaReceita();
-            //             },
-            //         })
-            //     }
-            // }
+    // Remove a associação da aula especifica
+    function deleteReceita(idAssoc) {
+        // var idDataTemp = idData;
+        idData = idAssoc;
+        load_url();
+        $.ajax(deleteAulaReceita, {
+            type: 'DELETE',
+            data: {
+                "id_aula_receita": idAssoc
+            },
+            dataType: 'json',
+            success: function () {
+                console.log("Receita da associativa removido");
+            },
+            error: function () {
+                console.log("Problemas para remover as receitas da associativa");
+                // return adicionaReceita();
+            }
         })
     }
 
     // Adiciona todas as Receitas da aula
-    function adicionaReceita(idData, receitaTr) {
+    function aulaReceita_control(idData) {
 
         // Se idData == 0, CREATE AULA, senao EDIT AULA
         if (idData == 0) {
@@ -179,7 +166,7 @@ $('#addAula').on('click', '#saveButton', function () {
             return eachReceita(idData);
         }
 
-        // pega a id da aula que acabou de ser criada
+        // pega a id da aula que acabou de ser criada, ao criar uma aula ele ja irá ir inserindo as receitas
         function searchLastId(arr, prop) {
             var lastId;
             for (var i = 0; i < arr.length; i++) {
@@ -189,33 +176,10 @@ $('#addAula').on('click', '#saveButton', function () {
             return lastId;
         }
 
-        // function eachReceita(idData) {
-        //     // var receitaArr = [];
-
-        //     for (i = 1; i < rec; i++) {
-        //         // pega a id da receita para enviar pelo ajax
-        //         var id_receita = $('.eachReceitaAula' + i + '').val();
-        //         var quantidade_receita = $('.eachQuantidadeReceita' + i + '').val();
-        //         var token = $("input[name=csrfmiddlewaretoken]").val();
-
-        //         receita = {}
-        //         receita["csrfmiddlewaretoken"] = token;
-        //         receita["id_aula"] = idData;
-        //         receita["id_receita"] = id_receita;
-        //         receita["quantidade_receita"] = quantidade_receita;
-
-        //         // receitaArr.push(receita);
-
-        //         postReceita(receita);
-        //     }
-        //     // console.log(receitaArr);
-        //     // return postReceita(receita);
-        // }
-
+        // serializa o formulario porco do html e adiciona a ID da aula, ele da post para cada receita individualmente na associativa
         function eachReceita(idData) {
-
             for (i = 1; i < rec; i++) {
-                var receita = $('.form_porco' + i + '').serializeArray();
+                var receita = $('.form_muito_porco' + i + '').serializeArray();
                 receita.push({
                     name: 'id_aula',
                     value: '' + idData + ''
@@ -225,17 +189,12 @@ $('#addAula').on('click', '#saveButton', function () {
         }
 
         function postReceita(receita) {
-            console.log(receita);
-            // var receitaArrParam = $.param(receita)
-            // var paramSerial = $(receitaArrParam).serialize();
-            // console.log(paramSerial)
+            console.log(receita)
             $.ajax({
                 type: "POST",
                 url: createAulaReceita,
                 data: receita,
-                // traditional: true,
                 dataType: 'json',
-                // contentType: "application/json",
                 success: function () {
                     console.log('inseriu receita');
                     return;

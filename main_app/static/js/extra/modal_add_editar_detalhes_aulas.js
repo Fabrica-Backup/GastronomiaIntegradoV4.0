@@ -1,9 +1,10 @@
 // variavel apenas por conveniencia, caso precisar alterar, altere aqui apenas
-window.form_addAula = $('#form_addAula');
 window.jsonAulaReceita;
 window.jsonIngrediente;
 // ========== MODAL EDITAR AULA ========== //
 $('.aulas').on('click', '.editar', function () {
+    var form_addAula = $('#form_addAula');
+
     // corrige o botao para "Salvar" da modal editar aula
     window.btnAgendar = false;
 
@@ -70,6 +71,7 @@ $('.aulas').on('click', '.editar', function () {
 
 // =========== MODAL MARCAR COMO AULA AGENDADA =========== //
 $('.aulas').on('click', '.botaoAgendarAula', function () {
+    var form_addAula = $('#form_addAula');
     // corrige o botao para "Agendar Aula" da modal agendar aula
     window.btnAgendar = true;
 
@@ -138,6 +140,7 @@ $('.aulas').on('click', '.botaoAgendarAula', function () {
 // modal editar/agendar aula, lista de receitas da aula (toda parte de baixo da modal)
 function mostraReceitas(idAula) {
     var htmlDelIngButton = '<td class="botao-excluir"><button type="button" class="excluir">Excluir</button></td>';
+    rec = 1;
 
     $.map(jsonAulaReceita, function (valAulaReceita) {
         if (idAula == valAulaReceita.id_aula) {
@@ -146,15 +149,22 @@ function mostraReceitas(idAula) {
                 if (valAulaReceita.id_receita == valReceita.id_receita) {
 
                     var htmlListReceitas = $('<tr data-id="' + valReceita.id_receita + '"></tr>');
-                    $('<td class="info-nome"><input hidden="" type="text" name="id_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlListReceitas);
-                    $('<td class="info-unidade"><input hidden="" type="text" name="quantidade_receita" value="' + valAulaReceita.quantidade_receita + '"><p>' + valAulaReceita.quantidade_receita + '</p></td>').appendTo(htmlListReceitas);
-                    $(htmlDelIngButton).appendTo(htmlListReceitas);
+                    var htmlForm = $('<form class="form_muito_porco' + rec + '"></form>')
+                    $('<td class="info-nome"><input hidden="" type="text" name="id_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlForm);
+                    $('<td class="info-unidade"><input hidden="" type="text" name="quantidade_receita" value="' + valAulaReceita.quantidade_receita + '"><p>' + valAulaReceita.quantidade_receita + '</p></td>').appendTo(htmlForm);
+
+                    // var htmlLinha = '<form class="form_porco'+rec+'"><div id="id_aula_receita"></div><tr data-id="' + valReceita.id_receita + '" class="ig"><td class="info-nome"><input hidden class="eachReceitaAula' + rec + '" type="text" name="id_receita" value="' + valReceita.id_receita + '" /><p>' + valReceita.nome_receita + '</p></td><td class="info-quantidade"><input hidden class="eachQuantidadeReceita' + rec + '" type="text" name="quantidade_receita" value="' + valAulaReceita.quantidade_receita + '" /><p>' + valAulaReceita.quantidade_receita + '</p></td><td class="botao-excluir">' + htmlDelIngButton + '</td></tr></form>';
+
+                    $(htmlDelIngButton).appendTo(htmlForm);
+
+                    $(htmlForm).appendTo(htmlListReceitas);
 
                     // joga na tela
                     $(htmlListReceitas).appendTo('.tabela_receita');
 
                     // receitaArray é criado em validacao_receitas_da_aula.js para não poder incluir receita ja incluso na aula
                     receitaArray.push(valReceita.id_receita);
+                    rec++;
                 }
             })
 
@@ -178,6 +188,7 @@ function mostraReceitas(idAula) {
 
 // ========== MODAL ADICIONAR AULA ========== //
 $('#addAulaBtn').on('click', function () {
+    var form_addAula = $('#form_addAula');
 
     limpaMensagens();
     // limpa a lista de receitas (nao acumular apertando editar varias vezes)
