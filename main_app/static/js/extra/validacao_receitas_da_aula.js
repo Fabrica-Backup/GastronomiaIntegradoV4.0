@@ -1,5 +1,5 @@
 window.receitaArray = [];
-window.rec = 1;
+window.rec = 0;
 $("#btnAddReceita").click(function (event) {
     event.preventDefault();
 
