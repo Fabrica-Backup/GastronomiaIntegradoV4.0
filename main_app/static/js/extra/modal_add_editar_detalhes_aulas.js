@@ -141,15 +141,14 @@ function mostraReceitas(idAula) {
     var htmlDelIngButton = '<td class="botao-excluir"><button type="button" class="excluir">Excluir</button></td>';
 
     // reseta o contador de receitas 'rec' e a array de validação 'receitaArray'
-    rec = 1;
+    rec = 0;
     receitaArray = [];
 
     $.map(jsonAulaReceita, function (valAulaReceita) {
         if (idAula == valAulaReceita.id_aula) {
-
+			
             $.each(jsonReceita, function (indexReceita, valReceita) {
                 if (valAulaReceita.id_receita == valReceita.id_receita) {
-
                     var htmlListReceitas = $('<tr data-id="' + valReceita.id_receita + '"></tr>');
                     var htmlForm = $('<form class="form_muito_porco' + rec + '"></form>')
                     $('<td class="info-nome"><input hidden="" type="text" name="id_receita" value="' + valReceita.id_receita + '"><p>' + valReceita.nome_receita + '</p></td>').appendTo(htmlForm);
@@ -166,7 +165,7 @@ function mostraReceitas(idAula) {
 
                     // receitaArray é criado em validacao_receitas_da_aula.js para não poder incluir receita ja incluso na aula
                     receitaArray.push((valReceita.id_receita).toString());
-                    rec++;
+					rec++;                    
                 }
             })
 
