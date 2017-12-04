@@ -268,6 +268,16 @@ $('#addAula').on('click', '#saveButton', function () {
 
 // ===================== MARCAR AULA COMO AGENDADA ===================== //
 $('#addAula').on('click', '#agendarButton', function () {
+
+    /// TODO: forEach em calculos()
+    // $.map(jsonAulaReceita, function(valAulaReceita){
+    //     if (idData == valAulaReceita.id_aula){
+    //         calculos();
+    //         return
+    //     }
+    // })
+    
+
     // pega id da receita
     idData = $(this).closest('#addAula').find('.id_aula').val();
 
