@@ -1,5 +1,5 @@
 window.receitaArray = [];
-
+window.rec = 0;
 $("#btnAddReceita").click(function (event) {
     event.preventDefault();
 
@@ -7,15 +7,27 @@ $("#btnAddReceita").click(function (event) {
     var formAdicionarReceita = $('#form_addAula');
     var receita = obtemReceitaDoFormulario(formAdicionarReceita);
 
-    var htmlLinha = '<tr data-id="' + receita.id + '" class="ig"><td class="info-nome"><input hidden type="text" name="lista_ingrediente.nome_ingrediente" value="' + receita.id + '" /><p>' + receita.nome + '</p></td><td class="info-quantidade"><input hidden type="text" name="lista_ingrediente.quantidade_receita" value="' + receita.quantidade + '" /><p>' + receita.quantidade + '</p></td><td class="botao-excluir">' + receita.excluir + '</td></tr>';
+    var htmlTr = $('<tr data-id="' + receita.id + '" class="ig"></tr>');
+    var htmlTdNome = $('<td class="info-nome"><input hidden class="eachReceitaAula' + rec + '" type="text" name="id_receita" value="' + receita.id + '" /><p>' + receita.nome + '</p></td>');
+    var htmlTdQtd = $('<td class="info-quantidade"><input hidden class="eachQuantidadeReceita' + rec + '" type="text" name="quantidade_receita" value="' + receita.quantidade + '" /><p>' + receita.quantidade + '</p></td>');
+    var htmlForm = $('<form class="form_muito_porco' + rec + '"></form>');
+
+    var htmlExcluirBtn = '<td class="botao-excluir">' + receita.excluir + '</td>'
+
+    $(htmlTdNome).appendTo(htmlForm);
+    $(htmlTdQtd).appendTo(htmlForm);
+
+    $(htmlExcluirBtn).appendTo(htmlForm);
+
+    $(htmlForm).appendTo(htmlTr);
 
     var erros = validaReceita(receita);
     if (erros.length > 0) {
         exibeMensagensDeErro(erros);
     } else {
-        $('.tabela_receita').append(htmlLinha);
+        $('.tabela_receita').append(htmlTr);
+        rec++;
     }
-
 });
 
 // BOTAO REMOVE RECEITA DA AULA
@@ -29,6 +41,7 @@ $(".tabela_receita").on('click', '.excluir', function () {
         }
     }
     $(this).closest('tr').remove();
+    rec--;
 });
 
 // CAPTURA OS DADOS DO SELECT RECEITA
@@ -50,7 +63,7 @@ function obtemReceitaDoFormulario(formAdicionarReceita) {
 // VALIDAÇAO DA RECEITA
 function validaReceita(receita) {
     var erros = [];
-    var idx = $.inArray(parseInt(receita.id), receitaArray);
+    var idx = $.inArray(receita.id, receitaArray);
 
     if (document.getElementById("receitas").selectedIndex == 0 || document.getElementById("receitas").value == 0) {
         erros.push("SELECIONE uma receita");
@@ -66,7 +79,6 @@ function validaReceita(receita) {
     }
     if (idx == -1 && receita.quantidade != 0 && !isNaN(receita.quantidade) && document.getElementById("receitas").selectedIndex != 0) {
         receitaArray.push(receita.id);
-        console.log(receitaArray)
         erros.length = 0;
     }
     return erros;

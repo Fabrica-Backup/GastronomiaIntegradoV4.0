@@ -375,11 +375,11 @@
                 <div class="modal-body">
                     <ul id="mensagens-erro-aula"></ul>
                     <ul id="mensagens-sucesso-aula"></ul>
-                    <form class="form-horizontal" method="POST" id="form_addAula">
-                        <div class="box-body">
+
+                    <div class="box-body">
+                        <form class="form-horizontal" method="POST" id="form_addAula">{% csrf_token %}
                             <div class="idAula"></div>
-                            <input hidden name="aula_agendada" value="false">
-                            <input hidden name="aula_concluida" value="false">
+                            <div id="form_reserva"></div>
                             <div class="form-group">
                                 <div class="col-xs-3">
                                     <label class="col-sm-3 control-label">Nome</label>
@@ -407,45 +407,50 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-xs-3">
-                                    <label class="col-sm-4 control-label">Receitas</label>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <select class="form-control" id="receitas" style="width: 100%;">
-                                            <option value=0>--- Receita ---</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-3 numReceitas"></div>
-                                    <button type="button" class="btn btn-success btn-sm" id="btnAddReceita">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                    </form>
-                    <form id="form_receitaAula">
+                        </form>
+
                         <div class="form-group">
-                            <div class="col-xs-10 col-sm-10">
-                                <table id="lista_receita" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Receita</th>
-                                            <th>Porções</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <!-- LOCAL ONDE A TABELA SERÁ GERADA -->
-                                    <tbody class="tabela_receita"> </tbody>
-                                </table>
+                            <div class="col-xs-3">
+                                <label class="col-sm-4 control-label">Receitas</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <select class="form-control" id="receitas" style="width: 100%;">
+                                        <option value=0>--- Receita ---</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-3 numReceitas">
+                                    <input type="text" id="numero_de_receitas" class="form-control" placeholder="Nº de Receitas" value="">
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm" id="btnAddReceita">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
                         </div>
-                    </form>
+
+
+                        <div class="col-xs-10 col-sm-10">
+                            <table id="lista_receita" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Receita</th>
+                                        <th>Porções</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <!-- LOCAL ONDE A TABELA SERÁ GERADA -->
+                                <tbody class="tabela_receita"> </tbody>
+                            </table>
+                        </div>
+
                     </div>
-                    <div class="modal-footer rodape"></div>
                 </div>
+                <div class="modal-footer rodape"></div>
             </div>
+
         </div>
+    </div>
+    </div>
     </div>
     <!-- FIM MODAL CRIAR AULA -->
     <!-- MODAL BOTAO COMFIRMAR AULA CONCLUIDA -->
@@ -510,6 +515,7 @@
     <script src="{% static '/js/urls.js' %}"></script>
     <!-- jQuery 2.2.3 -->
     <script src="{% static '/js/jquery-2.2.3.min.js' %}"></script>
+
     <!-- Bootstrap 3.3.7 -->
     <script src="{% static '/js/bootstrap.min.js' %}"></script>
     <script src="{% static '/js/app.min.js' %}"></script>
@@ -527,6 +533,9 @@
     <script src="{% static '/js/extra/estoque/add_editar_ingredientes.js' %}"></script>
     <script src="{% static '/js/extra/estoque/somar_subtrair.js' %}"></script>
     <script src="{% static '/js/extra/estoque/unidades.js' %}"></script>
+    <script src="{% static '/js/calculos/conclui_aula.js' %}"></script>
+
+
 </body>
 
 </html>

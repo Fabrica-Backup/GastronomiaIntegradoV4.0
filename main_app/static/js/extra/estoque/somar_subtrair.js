@@ -67,11 +67,9 @@ function addButton() {
             $.each(jsonUnidade, function (indexUnidade, valUnidade) {
                 $('#UnidadeMedidaSoma').append($('<option>').text(valUnidade.simbolo_unidade_medida).attr(('value'), valUnidade.id_unidade_medida));
 
-                // vem de unidades.js, filtra as unidades que podem ser usados
-                validaUnidadeSoma(valueUnidade);
-
                 // se as id de unidade dos json ingrediente e unidade forem iguais, joga a descricao do json unidade desse ingrediente na tela
                 if (valUnidade.id_unidade_medida == valIngrediente.id_unidade_medida) {
+
                     var htmlUnidadeMedida = '<h5 value="' + valIngrediente.id_unidade_medida + '">' + valUnidade.simbolo_unidade_medida + '</h5>';
 
                     // deixa selecionado a unidade do ingrediente ao abrir modal
@@ -91,6 +89,9 @@ function addButton() {
             $('.inputQtdSoma').html('<input type="text" onkeyup="calculaPreco()" class="form-control qtdSoma" placeholder="Quantidade">');
             $('.inputPreco').html('<input type="text" onkeyup="calculaPreco()" class="form-control valor_total_compra" placeholder="Preço total">');
 
+            // vem de unidades.js, filtra as unidades que podem ser usados
+            validaUnidadeSoma(valueUnidade);
+
             // abre a modal
             $('#somar').modal('show');
         }
@@ -102,10 +103,10 @@ function calculaPreco() {
     var unidadeSelecionado = $('#UnidadeMedidaSoma').find('option:selected').val();
     var qtdSoma = $('.qtdSoma').val();
 
-    if (unidadeSelecionado == '1' || unidadeSelecionado == '2' || unidadeSelecionado == '4') {
+    if (unidadeSelecionado == '1' || unidadeSelecionado == '2' || unidadeSelecionado == '3') {
         valorTransformado = qtdSoma;
     }
-    if (unidadeSelecionado == '3' || unidadeSelecionado == '5') {
+    if (unidadeSelecionado == '4' || unidadeSelecionado == '5') {
         valorTransformado = qtdSoma / 1000;
     }
     $('.inputValorTransformado').html('<input type="hidden" name="quantidade_estoque_ingrediente" class="form-control valorTransformado" placeholder="Quantidade" value="+' + valorTransformado + '">');
@@ -222,8 +223,6 @@ $('.lista-ingredientes').on('click', '.subButton', function () {
                     $('#formSubtrair').find('.unidadeTxtsub').html(htmlUnidadeMedida);
 
                     $('#formSubtrair').find('.unidadeTxt').html('<h5>' + valUnidade.simbolo_unidade_medida + '</h5>');
-
-                    return;
                 }
             })
 
@@ -233,14 +232,11 @@ $('.lista-ingredientes').on('click', '.subButton', function () {
             // joga na modal a id do ingrediente 'hidden' e a quantidade atual
             $('#formSubtrair').find('.idIngrediente').html(htmlIdIngrediente);
 
-
             // filtra as unidades
             validaUnidadeSubtrai(valueUnidade);
 
             // abre a modal
             $('#subtrair').modal('show');
-
-            return;
         }
     })
     // MOTIVO DE DELETAR ESTA NO HTML
