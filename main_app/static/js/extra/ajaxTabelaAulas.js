@@ -3,8 +3,6 @@
 window.jsonReceita;
 window.jsonAula;
 window.jsonAulaReceita;
-window.jsonReceitaIngrediente;
-window.jsonIngrediente;
 
 // verifica se foi dado get das receitas, aulas e periodo, caso nao tenha dado ele dará get aqui
 if (typeof jsonAula === 'undefined' || typeof jsonReceita === 'undefined' || typeof jsonPeriodo === 'undefined') {
@@ -272,68 +270,68 @@ $('#addAula').on('click', '#saveButton', function() {
 $('#addAula').on('click', '#agendarButton', function() {
 
     // garante que json ReceitaIngrediente baixou
-    if (typeof jsonReceitaIngrediente === 'undefined' || typeof jsonIngrediente === 'undefined') {
-        $.getJSON(listReceitaAula, function(jsonObjectReceitaIngrediente) {
-            jsonReceitaIngrediente = jsonObjectReceitaIngrediente;
-            $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
-                jsonIngrediente = jsonObjectIngrediente;
-            })
-        })
-    }
+    // if (typeof jsonReceitaIngrediente === 'undefined' || typeof jsonIngrediente === 'undefined') {
+    //     $.getJSON(listReceitaAula, function(jsonObjectReceitaIngrediente) {
+    //         jsonReceitaIngrediente = jsonObjectReceitaIngrediente;
+    //         $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
+    //             jsonIngrediente = jsonObjectIngrediente;
+    //         })
+    //     })
+    // }
 
     // pega id da receita
     idData = $(this).closest('#addAula').find('.id_aula').val();
 
     load_url();
-
-    $.map(jsonAulaReceita, function(valAulaReceita) {
-        if (idData == valAulaReceita.id_aula) {
-            calculos();
-
-
-
-            // function criaSerial() {
-            //     var ingredienteSerial = $('#reserva').serializeArray();
-
-            //     $.each(jsonIngrediente, function(index, valIngrediente) {
-            //         if (valAulaReceita.id_ingrediente == valIngrediente.id_ingrediente) {
-
-            //             ingredienteSerial.push({
-            //                 name: 'id_ingrediente',
-            //                 value: valIngrediente.id_ingrediente
-            //             }, {
-            //                 name: 'nome_ingrediente',
-            //                 value: valIngrediente.nome_ingrediente
-            //             }, {
-            //                 name: 'quantidade_calorica_ingrediente',
-            //                 value: valIngrediente.quantidade_calorica_ingrediente
-            //             }, {
-            //                 name: 'aproveitamento_ingrediente',
-            //                 value: valIngrediente.aproveitamento_ingrediente
-            //             }, {
-            //                 name: 'quantidade_estoque_ingrediente',
-            //                 value: valIngrediente.quantidade_estoque_ingrediente
-            //             }, {
-            //                 name: 'valor_ingrediente',
-            //                 value: valIngrediente.valor_ingrediente
-            //             }, {
-            //                 name: 'motivo_retirada_estoque',
-            //                 value: valIngrediente.motivo_retirada_estoque
-            //             }, {
-            //                 name: 'id_unidade_medida',
-            //                 value: valIngrediente.id_unidade_medida
-            //             })
-            //             console.log(ingredienteSerial)
-            //         }
-
-            //     })
-            // }
+    calculos();
+    // $.map(jsonAulaReceita, function(valAulaReceita) {
+    //     if (idData == valAulaReceita.id_aula) {
+    //         calculos();
 
 
 
+    // function criaSerial() {
+    //     var ingredienteSerial = $('#reserva').serializeArray();
 
-        }
-    })
+    //     $.each(jsonIngrediente, function(index, valIngrediente) {
+    //         if (valAulaReceita.id_ingrediente == valIngrediente.id_ingrediente) {
+
+    //             ingredienteSerial.push({
+    //                 name: 'id_ingrediente',
+    //                 value: valIngrediente.id_ingrediente
+    //             }, {
+    //                 name: 'nome_ingrediente',
+    //                 value: valIngrediente.nome_ingrediente
+    //             }, {
+    //                 name: 'quantidade_calorica_ingrediente',
+    //                 value: valIngrediente.quantidade_calorica_ingrediente
+    //             }, {
+    //                 name: 'aproveitamento_ingrediente',
+    //                 value: valIngrediente.aproveitamento_ingrediente
+    //             }, {
+    //                 name: 'quantidade_estoque_ingrediente',
+    //                 value: valIngrediente.quantidade_estoque_ingrediente
+    //             }, {
+    //                 name: 'valor_ingrediente',
+    //                 value: valIngrediente.valor_ingrediente
+    //             }, {
+    //                 name: 'motivo_retirada_estoque',
+    //                 value: valIngrediente.motivo_retirada_estoque
+    //             }, {
+    //                 name: 'id_unidade_medida',
+    //                 value: valIngrediente.id_unidade_medida
+    //             })
+    //             console.log(ingredienteSerial)
+    //         }
+
+    //     })
+    // }
+
+
+
+
+    // }
+    // })
 
     // var formAulaSerial = $('#form_addAula').serializeArray();
 

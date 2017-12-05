@@ -15,7 +15,7 @@ window.listReceita = 'http://localhost:8000/api/receitas/list';
 window.listAulaReceita = 'http://localhost:8000/api/aula_receita/list/';
 
 // associativa receita_ingrediente
-window.listReceitaAula = 'http://localhost:8000/api/receita_ingrediente/list/';
+window.listReceitaIngrediente = 'http://localhost:8000/api/receita_ingrediente/list/';
 
 // ========== LIST fim ========== //
 
