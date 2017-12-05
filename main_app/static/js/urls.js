@@ -14,6 +14,9 @@ window.listReceita = 'http://localhost:8000/api/receitas/list';
 // associativa aula_receita
 window.listAulaReceita = 'http://localhost:8000/api/aula_receita/list/';
 
+// associativa receita_ingrediente
+window.listReceitaAula = 'http://localhost:8000/api/receita_ingrediente/list/';
+
 // ========== LIST fim ========== //
 
 function load_url() {
@@ -33,4 +36,6 @@ function load_url() {
     // ========== AULA RECEITA ========== //
     window.createAulaReceita = 'http://localhost:8000/api/aula_receita/create/';
     window.deleteAulaReceita = 'http://localhost:8000/api/aula_receita/delete/' + idData + '';
+
+    // ========== RECEITA INGREDIENTE ========== //
 }
