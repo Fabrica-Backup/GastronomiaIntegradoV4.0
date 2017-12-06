@@ -269,16 +269,6 @@ $('#addAula').on('click', '#saveButton', function() {
 // ===================== MARCAR AULA COMO AGENDADA ===================== //
 $('#addAula').on('click', '#agendarButton', function() {
 
-    // garante que json ReceitaIngrediente baixou
-    // if (typeof jsonReceitaIngrediente === 'undefined' || typeof jsonIngrediente === 'undefined') {
-    //     $.getJSON(listReceitaAula, function(jsonObjectReceitaIngrediente) {
-    //         jsonReceitaIngrediente = jsonObjectReceitaIngrediente;
-    //         $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
-    //             jsonIngrediente = jsonObjectIngrediente;
-    //         })
-    //     })
-    // }
-
     // pega id da receita
     idData = $(this).closest('#addAula').find('.id_aula').val();
 
