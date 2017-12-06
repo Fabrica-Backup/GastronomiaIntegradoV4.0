@@ -1,30 +1,29 @@
-function validacao_agenda_aula(receitaArr, ingredienteArr, reservaArr) {
+function validacao_agenda_aula(ingredienteArr, reservaArr, serialArr) {
     // garante uue Json Unidades foi baixado
     if (typeof jsonUnidadeMedida === 'undefined' || typeof jsonIngrediente === 'undefined') {
         $.getJSON(listUnidadeMedida, function(jsonObjectUnidade) {
             jsonUnidade = jsonObjectUnidade;
             $.getJSON(listIngrediente, function(jsonObjectIngredientes) {
                 jsonIngrediente = jsonObjectIngredientes;
-                mainErros(receitaArr, ingredienteArr, reservaArr)
+                mainErros(ingredienteArr, reservaArr, serialArr)
             })
         })
     } else {
-        mainErros(receitaArr, ingredienteArr, reservaArr)
+        mainErros(ingredienteArr, reservaArr, serialArr)
     }
 
-    function mainErros(receitaArr, ingredienteArr, reservaArr) {
-        var erros = validaReserva(receitaArr, ingredienteArr, reservaArr);
+    function mainErros(ingredienteArr, reservaArr, serialArr) {
+        var erros = validaReserva(ingredienteArr, reservaArr);
 
         if (erros.length > 0) {
-            console.log(erros);
             exibeMensagensDeErro(erros);
         } else {
-            // continua funçao de ajax
+            ajaxIngrediente(ingredienteArr, reservaArr, serialArr);
         }
     }
 }
 
-function validaReserva(receitaArr, ingredienteArr, reservaArr) {
+function validaReserva(ingredienteArr, reservaArr) {
     var erros = [];
 
     var qtdReservaAtualArr = [];
@@ -34,9 +33,9 @@ function validaReserva(receitaArr, ingredienteArr, reservaArr) {
     var stringUnidadeArr = [];
 
     // var tipoUnidade = buscaUnidadeMedida(ingredienteArr);
-    populaArrays();
+    populaMaisArrays();
 
-    function populaArrays() {
+    function populaMaisArrays() {
         // popula arrays qtdReservaAtualArr e qtdEstoqueArr
         for (var i = 0; i < ingredienteArr.length; i++) {
             $.map(jsonIngrediente, function(valIngrediente) {
@@ -55,7 +54,6 @@ function validaReserva(receitaArr, ingredienteArr, reservaArr) {
         }
 
         var stringUnidadeArr = populaUnidadeArr(unidadeArr)
-        console.log(stringUnidadeArr)
         return qtdReservaAtualArr, qtdEstoqueArr, nomeIngredienteArr, unidadeArr, stringUnidadeArr;
     }
 
@@ -68,14 +66,12 @@ function validaReserva(receitaArr, ingredienteArr, reservaArr) {
                 }
             })
         }
-        console.log(stringUnidadeArr)
         return stringUnidadeArr;
     }
 
     // VALIDAÇAO AQUI
-    for (var j = 0; j < ingredienteArr.length; j++) {
-        if (reservaArr[j] > qtdEstoqueArr[j]) {
-
+    for (var j = 0; j > ingredienteArr.length; j++) {
+        if (reservaArr[j] < qtdEstoqueArr[j]) {
             var qtdFaltante = reservaArr[j] - qtdEstoqueArr[j];
             erros.push("Faltam " + qtdFaltante + "" + stringUnidadeArr[j] + " de " + nomeIngredienteArr[j] + " no estoque!")
         }

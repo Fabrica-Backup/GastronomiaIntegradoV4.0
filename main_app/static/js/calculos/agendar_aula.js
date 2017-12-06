@@ -3,6 +3,7 @@ function calculos() {
     var receitaArr = [];
     var ingredienteArr = [];
     var reservaArr = [];
+    var serialArr = [];
 
     // garante que a associativa receita_ingrediente foi baixado
     if (typeof jsonReceitaIngrediente === 'undefined' || typeof jsonIngrediente === 'undefined') {
@@ -42,7 +43,8 @@ function calculos() {
                 }
             })
         }
-        validacao_agenda_aula(receitaArr, ingredienteArr, reservaArr)
+        // localizado em /calculos/validacao_agendar_aula.js
+        validacao_agenda_aula(ingredienteArr, reservaArr, serialArr)
     }
 
     // =========================== AQUI COMEÇA OS CALCULOS ========================== //
@@ -59,88 +61,9 @@ function calculos() {
         }
     }
 
-    function montaJson(idIngrediente, i, reservaTotal) {
-        var serializedReturn = $('input[name!=quantidade_reservada_ingrediente]', $('.qtdReceita' + i + '')).serializeArray();
-
-        validacao_agenda_aula(idIngrediente, reservaTotal);
-
-        $.map(jsonIngrediente, function(valIngrediente) {
-            if (idIngrediente == valIngrediente.id_ingrediente) {
-
-                // VALIDAÇÃO AQUI chamado em validacao_agendar_aula.js
-
-
-                serializedReturn.push({
-                    name: 'nome_ingrediente',
-                    value: valIngrediente.nome_ingrediente
-                }, {
-                    name: 'quantidade_calorica_ingrediente',
-                    value: valIngrediente.quantidade_calorica_ingrediente
-                }, {
-                    name: 'aproveitamento_ingrediente',
-                    value: valIngrediente.aproveitamento_ingrediente
-                }, {
-                    name: 'quantidade_estoque_ingrediente',
-                    value: valIngrediente.quantidade_estoque_ingrediente
-                }, {
-                    name: 'quantidade_reservada_ingrediente',
-                    value: reservaTotal
-                }, {
-                    name: 'valor_ingrediente',
-                    value: valIngrediente.valor_ingrediente
-                }, {
-                    name: 'motivo_retirada_estoque',
-                    value: valIngrediente.motivo_retirada_estoque
-                }, {
-                    name: 'id_unidade_medida',
-                    value: valIngrediente.id_unidade_medida
-                })
-            }
-        })
-
-        return serializedReturn;
-    }
-
-    function ajaxIngrediente(i, idIngrediente, reservaTotal) {
-        var jsonMontado = montaJson(idIngrediente, i, reservaTotal);
-
-        console.log('serializedReturn', jsonMontado)
-        console.log('passou pelo AJAX')
-            // $.ajax({
-            //         type: "POST",
-            //         url: createAulaReceita,
-            //         data: receita,
-            //         dataType: 'json',
-            //         success: function() {
-            //             $('#addAula').modal('hide')
-            //             swal({
-            //                     title: "SUCESSO!",
-            //                     type: "success",
-            //                 },
-            //                 function() {
-            //                     location.reload();
-            //                 }
-            //             )
-            //         },
-            //         error: function() {
-            //             swal({
-            //                 title: "Problemas na inserção das receitas na aula",
-            //                 type: "error",
-            //                 confirmButtonText: "Ok",
-            //                 confirmButtonColor: "#DD6B55",
-            //             })
-            //         }
-            //     }
-
-        // );
-
-    }
-
     function somaIngredientesReservados(idIngrediente, qtdIngrediente) {
         var reservaAtual = parseInt(pegaIngredientesReservados(idIngrediente));
         var reservaSomada = reservaAtual + qtdIngrediente;
-
-
         return reservaSomada;
     }
 
@@ -152,5 +75,89 @@ function calculos() {
             }
         })
         return getReservaAtual;
+    }
+}
+
+function montaJson(ingredienteArr, reservaArr, serialArr) {
+    // arr armazena todos os json para ser passado pelo ajax
+    var arr = [];
+    for (var i = 0; i < ingredienteArr.length; i++) {
+        var serialArray = $('input[name!=quantidade_reservada_ingrediente]', $('.qtdReceita' + i + '')).serializeArray();
+
+        completaJson(serialArray, i);
+    }
+
+    function completaJson(serialArray, i) {
+        $.map(jsonIngrediente, function(valIngrediente) {
+            if (ingredienteArr[i] == valIngrediente.id_ingrediente) {
+
+                serialArray.push({
+                    name: 'nome_ingrediente',
+                    value: valIngrediente.nome_ingrediente
+                }, {
+                    name: 'quantidade_calorica_ingrediente',
+                    value: valIngrediente.quantidade_calorica_ingrediente
+                }, {
+                    name: 'aproveitamento_ingrediente',
+                    value: valIngrediente.aproveitamento_ingrediente
+                }, {
+                    name: 'quantidade_reservada_ingrediente',
+                    value: reservaArr[i]
+                }, {
+                    name: 'valor_ingrediente',
+                    value: valIngrediente.valor_ingrediente
+                }, {
+                    name: 'motivo_retirada_estoque',
+                    value: valIngrediente.motivo_retirada_estoque
+                }, {
+                    name: 'id_unidade_medida',
+                    value: valIngrediente.id_unidade_medida
+                }, {
+                    name: 'id_ingrediente',
+                    value: valIngrediente.id_ingrediente
+                })
+                arr.push(serialArray);
+            }
+        })
+    }
+    return arr;
+}
+
+function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
+    var jsonMontado = montaJson(ingredienteArr, reservaArr, serialArr);
+
+    console.log('jsonMontado', jsonMontado)
+    for (var i = 0; i < jsonMontado.length; i++) {
+        idData = ingredienteArr[i];
+
+        load_url();
+
+        $.ajax({
+                type: "POST",
+                url: updateIngrediente,
+                data: jsonMontado[i],
+                dataType: 'json',
+                success: function() {
+                    $('#addAula').modal('hide')
+                    swal({
+                            title: "SUCESSO!",
+                            type: "success",
+                        },
+                        // function() {
+                        //     location.reload();
+                        // }
+                    )
+                },
+                error: function(serialArr) {
+                    swal({
+                        title: "Problemas ao reservar os ingredientes",
+                        type: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#DD6B55",
+                    })
+                }
+            }
+
+        );
     }
 }

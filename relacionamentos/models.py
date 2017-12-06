@@ -16,9 +16,9 @@ class Ingrediente (models.Model):
     aproveitamento_ingrediente = models.DecimalField(
         max_digits=4, decimal_places=1)
     quantidade_estoque_ingrediente = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0)
+        max_digits=12, decimal_places=2, default=0, null=True)
     quantidade_reservada_ingrediente = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0)
+        max_digits=12, decimal_places=2, default=0, null=True)
     valor_ingrediente = models.DecimalField(
         max_digits=12, decimal_places=2, default=0)
     motivo_retirada_estoque = models.CharField(max_length=200, null=True)

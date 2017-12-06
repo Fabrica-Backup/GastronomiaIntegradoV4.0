@@ -269,6 +269,7 @@ $('#addAula').on('click', '#agendarButton', function() {
 
     load_url();
 
+    // calculos() é chamado em /calculos/agendar_aula.js
     calculos();
 
     // $.map(jsonAulaReceita, function(valAulaReceita) {
