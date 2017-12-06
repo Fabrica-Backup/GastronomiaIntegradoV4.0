@@ -1,6 +1,4 @@
 $(document).ready(function() {
-    window.jsonAula;
-    window.jsonIngredientes;
     // garante que a tabela de aulas e ingredientes foi carregada
     if (typeof jsonAula === 'undefined' || typeof jsonIngredientes === 'undefined') {
         $.getJSON(listAula, function(jsonObjectAula) {
@@ -43,7 +41,6 @@ function calculaValores() {
 
     // ========== Carta Valor Estoque ==========
     var valorEstoque = 0
-        // var valTotalIngrediente = 0;
     $.each(jsonIngredientes, function(indexIngredientes, valIngredientes) {
         var valorIngrediente = parseFloat(valIngredientes.valor_ingrediente);
         var qtdIngrediente = parseFloat(valIngredientes.quantidade_estoque_ingrediente);

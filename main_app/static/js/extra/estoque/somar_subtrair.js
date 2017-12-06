@@ -12,8 +12,6 @@ $('.lista-ingredientes').on('click', '.addButton', function() {
 });
 
 function getThingsSoma() {
-    window.jsonIngrediente;
-    window.jsonUnidade;
     if (typeof jsonIngrediente === 'undefined' || typeof jsonUnidade === 'undefined') {
         $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
             jsonIngrediente = jsonObjectIngrediente;

@@ -1,6 +1,3 @@
-// variavel apenas por conveniencia, caso precisar alterar, altere aqui apenas
-window.jsonAulaReceita;
-window.jsonIngrediente;
 // ========== MODAL EDITAR AULA ========== //
 $('.aulas').on('click', '.editar', function() {
     var form_addAula = $('#form_addAula');

@@ -1,9 +1,4 @@
 ﻿// ==================== GET ===================== //
-// armazena os objetos json de receitas, aulas, e unidade para ser usado em outros locais
-window.jsonReceita;
-window.jsonAula;
-window.jsonAulaReceita;
-
 // verifica se foi dado get das receitas, aulas e periodo, caso nao tenha dado ele dará get aqui
 if (typeof jsonAula === 'undefined' || typeof jsonReceita === 'undefined' || typeof jsonPeriodo === 'undefined') {
     // get da tabela de aulas 
@@ -273,7 +268,9 @@ $('#addAula').on('click', '#agendarButton', function() {
     idData = $(this).closest('#addAula').find('.id_aula').val();
 
     load_url();
+
     calculos();
+
     // $.map(jsonAulaReceita, function(valAulaReceita) {
     //     if (idData == valAulaReceita.id_aula) {
     //         calculos();

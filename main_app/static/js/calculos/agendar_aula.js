@@ -1,15 +1,8 @@
 function calculos() {
-    window.jsonReceitaIngrediente;
-    window.jsonIngrediente;
-
     // cria array com as receitas da aula
     var receitaArr = [];
-
-    $.each(jsonAulaReceita, function(index, valAulaReceita) {
-        if (valAulaReceita.id_aula == idData) {
-            receitaArr.push(valAulaReceita.id_receita);
-        }
-    })
+    var ingredienteArr = [];
+    var reservaArr = [];
 
     // garante que a associativa receita_ingrediente foi baixado
     if (typeof jsonReceitaIngrediente === 'undefined' || typeof jsonIngrediente === 'undefined') {
@@ -17,37 +10,42 @@ function calculos() {
             jsonReceitaIngrediente = jsonObjectReceitaIngrediente;
             $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
                 jsonIngrediente = jsonObjectIngrediente;
-                mainFunction();
+                populaArrays();
             })
         })
     } else {
-        mainFunction();
+        populaArrays();
     }
 
-    // =========================== AQUI COMEÇA OS CALCULOS ========================== //
-    function mainFunction() {
-        // busca as receitas que está na array receitaArr
+    function populaArrays() {
+        // popula receitaArr com as id das receitas
+        $.each(jsonAulaReceita, function(index, valAulaReceita) {
+            if (valAulaReceita.id_aula == idData) {
+                receitaArr.push(valAulaReceita.id_receita);
+            }
+        })
+
+        // popula receitaArr
         for (i = 0; i < receitaArr.length; i++) {
             $.map(jsonReceitaIngrediente, function(valReceitaIngrediente) {
                 if (valReceitaIngrediente.id_receita == receitaArr[i]) {
+
                     // qtdIngrediente_receita é a quantidade de ingredientes usado para a receita especifica
                     var qtdIngrediente_receita = valReceitaIngrediente.quantidade_bruta_receita_ingrediente
-                    var idIngrediente = valReceitaIngrediente.id_ingrediente;
-
                     var serialQtdReceita = $('.qtdReceita' + i + '').serializeArray();
-
                     var qtdIngrediente = calculaIngredientes(qtdIngrediente_receita, serialQtdReceita);
+                    var idIngrediente = valReceitaIngrediente.id_ingrediente;
+                    ingredienteArr.push(idIngrediente);
 
                     var reservaTotal = somaIngredientesReservados(idIngrediente, qtdIngrediente);
-
-                    console.log('reserva total', reservaTotal, ' | idIngrediente', idIngrediente)
-                        // i define o form_muito_porco a ser procurado no html
-                    ajaxIngrediente(i, idIngrediente, reservaTotal);
+                    reservaArr.push(reservaTotal);
                 }
             })
         }
+        validacao_agenda_aula(receitaArr, ingredienteArr, reservaArr)
     }
 
+    // =========================== AQUI COMEÇA OS CALCULOS ========================== //
     // multiplica quantidade de receita desejado * ingrediente dessa receita
     function calculaIngredientes(qtdIngrediente_receita, serialQtdReceita) {
         var stringQtdReceita = JSON.stringify(serialQtdReceita);
@@ -62,12 +60,16 @@ function calculos() {
     }
 
     function montaJson(idIngrediente, i, reservaTotal) {
-
         var serializedReturn = $('input[name!=quantidade_reservada_ingrediente]', $('.qtdReceita' + i + '')).serializeArray();
 
+        validacao_agenda_aula(idIngrediente, reservaTotal);
 
         $.map(jsonIngrediente, function(valIngrediente) {
             if (idIngrediente == valIngrediente.id_ingrediente) {
+
+                // VALIDAÇÃO AQUI chamado em validacao_agendar_aula.js
+
+
                 serializedReturn.push({
                     name: 'nome_ingrediente',
                     value: valIngrediente.nome_ingrediente
@@ -103,6 +105,7 @@ function calculos() {
         var jsonMontado = montaJson(idIngrediente, i, reservaTotal);
 
         console.log('serializedReturn', jsonMontado)
+        console.log('passou pelo AJAX')
             // $.ajax({
             //         type: "POST",
             //         url: createAulaReceita,
@@ -136,6 +139,8 @@ function calculos() {
     function somaIngredientesReservados(idIngrediente, qtdIngrediente) {
         var reservaAtual = parseInt(pegaIngredientesReservados(idIngrediente));
         var reservaSomada = reservaAtual + qtdIngrediente;
+
+
         return reservaSomada;
     }
 
