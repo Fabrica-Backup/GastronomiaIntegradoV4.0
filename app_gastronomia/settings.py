@@ -89,9 +89,9 @@ WSGI_APPLICATION = 'app_gastronomia.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'many',
+        'NAME': 'gastronomia',
         'USER': 'root',
-        'PASSWORD': 'mysqlrootpassword',
+        'PASSWORD': 'root',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

@@ -1,21 +1,33 @@
 window.receitaArray = [];
-window.rec = 1;
+window.rec = 0;
 $("#btnAddReceita").click(function (event) {
     event.preventDefault();
 
     limpaMensagens();
     var formAdicionarReceita = $('#form_addAula');
     var receita = obtemReceitaDoFormulario(formAdicionarReceita);
-    var htmlLinha = '<tr data-id="' + receita.id + '" class="ig"><td class="info-nome"><input hidden class="eachReceitaAula' + rec + '" type="text" name="id_receita" value="' + receita.id + '" /><p>' + receita.nome + '</p></td><td class="info-quantidade"><input hidden class="eachQuantidadeReceita' + rec + '" type="text" name="quantidade_receita" value="' + receita.quantidade + '" /><p>' + receita.quantidade + '</p></td><td class="botao-excluir">' + receita.excluir + '</td></tr>';
+
+    var htmlTr = $('<tr data-id="' + receita.id + '" class="ig"></tr>');
+    var htmlTdNome = $('<td class="info-nome"><input hidden class="eachReceitaAula' + rec + '" type="text" name="id_receita" value="' + receita.id + '" /><p>' + receita.nome + '</p></td>');
+    var htmlTdQtd = $('<td class="info-quantidade"><input hidden class="eachQuantidadeReceita' + rec + '" type="text" name="quantidade_receita" value="' + receita.quantidade + '" /><p>' + receita.quantidade + '</p></td>');
+    var htmlForm = $('<form class="form_muito_porco' + rec + '"></form>');
+
+    var htmlExcluirBtn = '<td class="botao-excluir">' + receita.excluir + '</td>'
+
+    $(htmlTdNome).appendTo(htmlForm);
+    $(htmlTdQtd).appendTo(htmlForm);
+
+    $(htmlExcluirBtn).appendTo(htmlForm);
+
+    $(htmlForm).appendTo(htmlTr);
 
     var erros = validaReceita(receita);
     if (erros.length > 0) {
         exibeMensagensDeErro(erros);
     } else {
-        $('.tabela_receita').append(htmlLinha);
+        $('.tabela_receita').append(htmlTr);
         rec++;
     }
-
 });
 
 // BOTAO REMOVE RECEITA DA AULA

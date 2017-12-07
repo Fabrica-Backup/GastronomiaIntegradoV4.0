@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="{% static '/css/AdminLTE.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/_all-skins.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/util.css' %}">
+    <link rel="stylesheet" href="{% static '/css/sweetalert.css' %}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{% static '/css/select2.min.css' %}">
 </head>
 
 <body class="hold-transition skin-green sidebar-mini">
@@ -24,8 +27,10 @@
 
         <header class="main-header">
             <a href="http://localhost:8000" class="logo">
-                <span class="logo-mini"><b>G</b>O</span>
-                <span class="logo-lg"><b>Gastronomia</b>Opet</span>
+                <span class="logo-mini">
+                    <b>G</b>O</span>
+                <span class="logo-lg">
+                    <b>Gastronomia</b>Opet</span>
             </a>
             <nav class="navbar navbar-static-top">
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -63,9 +68,10 @@
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
                 </div>
             </form>
             <!-- Search FIM -->
@@ -76,32 +82,42 @@
 
                 <li class="treeview">
                     <a href="http://localhost:8000">
-                        <i class="fa fa-bar-chart-o"></i> <span>Dashboard</span>
+                        <i class="fa fa-bar-chart-o"></i>
+                        <span>Dashboard</span>
                     </a>
                 </li>
 
                 <li class="treeview">
                     <a href="http://localhost:8000/receitas">
-                        <i class="fa fa-book"></i> <span>Receitas</span>
+                        <i class="fa fa-book"></i>
+                        <span>Receitas</span>
                     </a>
                 </li>
 
                 <li class="treeview">
                     <a href="http://localhost:8000/estoque">
-                        <i class="fa fa-cubes"></i> <span>Estoque</span>
+                        <i class="fa fa-cubes"></i>
+                        <span>Estoque</span>
                     </a>
                 </li>
 
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-calendar"></i> <span>Aula</span>
+                        <i class="fa fa-calendar"></i>
+                        <span>Aula</span>
                         <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="http://localhost:8000/planejar-aulas"><i class="fa fa-circle-o"></i>Planejar Aulas</a></li>
-                        <li><a href="http://localhost:8000/aulas-concluidas"><i class="fa fa-circle-o"></i>Aulas Concluidas</a></li>
+                        <li>
+                            <a href="http://localhost:8000/planejar-aulas">
+                                <i class="fa fa-circle-o"></i>Planejar Aulas</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8000/aulas-concluidas">
+                                <i class="fa fa-circle-o"></i>Aulas Concluidas</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -140,25 +156,26 @@
                                     <label for="inputPassword3" class="col-sm-3 control-label">Classificação</label>
 
                                     <div class="col-sm-8 input-group">
-                                        <select type="text" class="form-control" id="inputClassificacao">
-                                            <option>oi</option>
+                                        <select id="classificacao" class="form-control select2" style="width: 100%;">
+                                            <option value="None" selected="Selected">Selecione a Classificação</option>
                                         </select>
+
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#formClassSetor">Criar classificação</button>
+                                            <button id="addClassificacao" type="button" class="btn btn-success" data-toggle="modal">Criar classificação</button>
                                         </div>
                                     </div>
 
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">Setor</label>
+                                    <label for="inputPassword3" class="col-sm-3 control-label">Categoria</label>
 
                                     <div class="col-sm-8 input-group">
-                                        <select type="text" class="form-control" id="inputClassificacao">
-                                            <option>oi</option>
+                                        <select id="categoria" class="form-control select2" style="width: 100%;">
+                                            <option value="None" selected="Selected">Selecione a Categoria</option>
                                         </select>
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#formClassSetor">Criar setor</button>
+                                            <button id="addCategoria" type="button" class="btn btn-success" data-toggle="modal">Criar Categoria</button>
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +193,6 @@
 
                                     <div class="pull-right box-tools">
                                         <button type="button" class="btn btn-success btn-sm" id="addIngrediente">Criar Novo Ingrediente</button>
-
                                     </div>
                                 </div>
                                 <ul id="mensagens-ing-receita-erro"></ul>
@@ -186,15 +202,13 @@
                                             <label for="inputIngrediente" class="col-sm-1 col-xs-1 control-label"></label>
                                             <div class="row">
 
-                                                <button id="novo-ingrediente" type="button" class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                                <button id="novo-ingrediente" type="button" class="btn btn-success btn-sm">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
 
                                                 <div class="col-sm-6 col-xs-4">
-                                                    <select id="nomeIngrediente" name="nomeIngrediente" class="form-control" style="width: 100%;">
-                                                        <option>--- INGREDIENTE ---</option>
-                                                        <option value="1">Abacaxi</option>
-                                                        <option value="2">Banana</option>
-                                                        <option value="3">Açucar</option>
-                                                        <option value="4">Nabo de Lado</option>
+                                                    <select id="nomeIngredientes" name="nomeIngredientes" class="form-control" style="width: 100%;">
+                                                        <option value="None" selected="Selected">Selecione os Ingredientes</option>
                                                     </select>
                                                 </div>
 
@@ -203,9 +217,10 @@
                                                 </div>
 
                                                 <div class="col-xs-1">
-                                                    <h5 name="unidade" id="unidade">kg</h5>
+                                                    <select name="unidade" id="unidade" class="form-control" style="width: 120%;">
+                                                        <!-- <option value="None" selected="Selected">Unidade </option> -->
+                                                    </select>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </form>
@@ -222,6 +237,8 @@
 
                                             <!-- LOCAL ONDE A TABELA SERÁ GERADA -->
                                             <tbody class="tabela-ingrediente"> </tbody>
+                                            <!-- <input name="quantidade" type="text" value="44" hidden>
+                                            <h3>44</h3> -->
                                         </table>
                                     </form>
                                 </div>
@@ -230,8 +247,7 @@
                     </div>
                     <!-- FIM LISTA INGREDIENTE -->
 
-                    <!-- MODAL ADICIONAR INGREDIENTE MODAL -->
-                    <!-- esta modal utiliza estoque/validacao-ingrediente.js e estoque/add-editar-modal.js para funcionar -->
+                    <!-- ADICIONAR/EDITAR INGREDIENTE MODAL -->
                     <div id="formIngrediente" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -239,115 +255,67 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-
                                     <ul id="mensagens-erro"></ul>
                                     <ul id="mensagens-sucesso"></ul>
-
                                     <form id="form-addIngrediente" name="form-addIngrediente" method="POST" class="form-horizontal">{% csrf_token %}
+                                        <input type='hidden' name='csrfmiddlewaretoken' value='Ldnbqcz0AXr8ZTRo9SdF1wEh0tkDqN5WsvfxihL6AFblg23sqjzTw55ECsy699ct'
+                                        />
                                         <div class="box-body">
                                             <div class="form-group">
                                                 <label for="inputIngrediente" class="col-sm-3 control-label">Ingrediente*</label>
                                                 <div class="col-sm-6 idIngrediente"></div>
                                                 <div class="col-sm-6 NomeIngrediente"></div>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="inputCalorias" class="col-sm-3 control-label">Quantidade Calorica*</label>
-
                                                 <div class="col-sm-6 QuantidadeCalorica"></div>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="inputAproveitamento" class="col-sm-3 control-label">Aproveitamento*</label>
-                                                <div class="col-sm-6 Aproveitamento"></div>
+                                                <div class="col-sm-6 Aproveitamento "></div>
                                             </div>
-
-                                            <div class="form-group">
-                                                <label for="inputQtdMinimo" class="col-sm-3 control-label">Quantidade em Estoque</label>
-                                                <div class="col-sm-6 QuantidadeEstoque"></div>
-                                            </div>
-
                                             <div class="form-group">
                                                 <label for="inputUnidade" class="col-sm-3 control-label">Unidade*</label>
-                                                <div class="col-sm-6">
-                                                    <select name="unidade" class="form-control select2 UnidadeMedida" style="width: 100%;">
-                                                            <option value="1">kg</option>
-                                                            <option value="2">g</option>
-                                                            <option value="3">l</option>
-                                                            <option value="4">ml</option>
-                                                            <option value="5">un</option>
-                                                    </select>
+                                                <div class="col-sm-6 listaUnidade">
+                                                    <select name="id_unidade_medida" class="form-control" id="unidadeMedida" style="width: 100%;"></select>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                            <button id="adicionar-ingrediente" type="submit" class="btn btn-success pull-right">Salvar</button>
+                                            <button id="adicionar-ingrediente" type="button" class="btn btn-success pull-right">Salvar</button>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- FIM MODAL ADICIONAR INGREDIENTE-->
+                    <!-- FIM ADICIONAR/EDITAR INGREDIENTE-->
 
-                    <!-- MODAL ADICIONAR INGREDIENTE MODAL -->
-                    <!-- esta modal utiliza estoque/validacao-ingrediente.js e estoque/add-editar-modal.js para funcionar -->
-                    <div id="formClassSetor" class="modal fade" role="dialog">
+                    <!-- MODAL ADICIONAR CATEGORIA MODAL -->
+                    <div id="formCategoria" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <div class="modal-header classSetorHeader">
+                                <div class="modal-header classCategoriaHeader">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4>header - me delete</h4>
+                                    <h4>Criar nova Categoria</h4>
                                 </div>
                                 <div class="modal-body">
 
                                     <ul id="mensagens-erro"></ul>
                                     <ul id="mensagens-sucesso"></ul>
 
-                                    <form id="form-addIngrediente" name="form-addIngrediente" method="POST" class="form-horizontal">{% csrf_token %}
+                                    <form id="form-addCategoria" name="form-addCategoria" method="POST" class="form-horizontal">{% csrf_token %}
                                         <div class="box-body">
                                             <div class="form-group">
-                                                <label for="inputIngrediente" class="col-sm-3 control-label">Ingrediente*</label>
-                                                <div class="col-sm-6 idIngrediente"></div>
-                                                <div class="col-sm-6 NomeIngrediente"></div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="inputCalorias" class="col-sm-3 control-label">Quantidade Calorica*</label>
-
-                                                <div class="col-sm-6 QuantidadeCalorica"></div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="inputAproveitamento" class="col-sm-3 control-label">Aproveitamento*</label>
-                                                <div class="col-sm-6 Aproveitamento"></div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="inputQtdMinimo" class="col-sm-3 control-label">Quantidade em Estoque</label>
-                                                <div class="col-sm-6 QuantidadeEstoque"></div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="inputUnidade" class="col-sm-3 control-label">Unidade*</label>
-                                                <div class="col-sm-6">
-                                                    <select name="unidade" class="form-control select2 UnidadeMedida" style="width: 100%;">
-                                                            <option value="1">kg</option>
-                                                            <option value="2">g</option>
-                                                            <option value="3">l</option>
-                                                            <option value="4">ml</option>
-                                                            <option value="5">un</option>
-                                                    </select>
-                                                </div>
+                                                <label for="inputCategoria" class="col-sm-3 control-label">Categoria*</label>
+                                                <div class="col-sm-6 idCategoria"></div>
+                                                <div class="col-sm-6 nomeCategoria"></div>
                                             </div>
                                         </div>
-
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                            <button id="adicionar-ingrediente" type="submit" class="btn btn-success pull-right">Salvar</button>
+                                            <button id="adicionar-categoria" type="button" class="btn btn-success pull-right">Salvar</button>
                                         </div>
                                     </form>
 
@@ -355,8 +323,40 @@
                             </div>
                         </div>
                     </div>
-                    <!-- FIM MODAL ADICIONAR INGREDIENTE-->
+                    <!-- FIM MODAL ADICIONAR CATEGORIA-->
 
+                    <!-- MODAL ADICIONAR CATEGORIA MODAL -->
+                    <div id="formClassificacao" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header classClassificacaoHeader">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4>Criar nova Classificação</h4>
+                                </div>
+                                <div class="modal-body">
+
+                                    <ul id="mensagens-erro"></ul>
+                                    <ul id="mensagens-sucesso"></ul>
+
+                                    <form id="form-addClassificacao" name="form-addClassificacao" method="POST" class="form-horizontal">{% csrf_token %}
+                                        <div class="box-body">
+                                            <div class="form-group">
+                                                <label for="inputClassificacao" class="col-sm-3 control-label">Classificação*</label>
+                                                <div class="col-sm-6 idClassificacao"></div>
+                                                <div class="col-sm-6 nomeClassificacao"></div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button id="adicionar-classificacao" type="button" class="btn btn-success pull-right">Salvar</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FIM MODAL ADICIONAR CATEGORIA-->
                 </div>
                 <!-- /left column -->
 
@@ -380,8 +380,9 @@
                 <!-- /right column -->
             </div>
             <div class="box-center">
-                <button type="submit" class="btn btn-default col-md-1 col-md-offset-4">Cancelar</button></a>
-                <button type="submit" class="btn btn-success col-md-1 col-md-offset-2">Salvar</button>
+                <button type="submit" class="btn btn-default col-md-1 col-md-offset-4">Cancelar</button>
+                </a>
+                <button type="button" class="btn btn-success col-md-1 col-md-offset-2">Salvar</button>
             </div>
         </section>
     </div>
@@ -389,14 +390,22 @@
 
     <!-- jQuery 2.2.3 -->
     <script src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
+    <!-- <script src="{% static 'js/extra/nova-receita/ajaxListReceitas.js' %}"></script> -->
+    <script src="{% static 'js/extra/nova-receita/ajaxNovaReceita.js' %}"></script>
+    <!-- <script src="{% static 'js/extra/estoque/ajaxEstoque.js' %}"></script> -->
+    <script src="{% static 'js/extra/nova-receita/categoriaClassificacao.js' %}"></script>
     <!-- Bootstrap 3.3.7 -->
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <!-- AdminLTE App -->
     <script src="{% static 'js/app.min.js' %}"></script>
+    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+    <!-- Select2 -->
+    <script src="{% static 'js/select2.full.min.js' %}"></script>
     <script src="{% static 'js/extra/nova-receita/adicionar_ingrediente.js' %}"></script>
-    <script src="{% static 'js/extra/estoque/validacao_ingrediente.js' %}"></script>
-    <script src="{% static 'js/extra/estoque/add_editar_ingredientes.js' %}"></script>
+    <!-- <script src="{% static 'js/extra/estoque/validacao_ingrediente.js' %}"></script> -->
+    <!-- <script src="{% static 'js/extra/estoque/add_editar_ingredientes.js' %}"></script> -->
     <script src="{% static 'js/extra/util.js' %}"></script>
+
 
     <script type="text/javascript" src="{% static 'js/extra/nova-receita/nicEdit.js' %}"></script>
     <script type="text/javascript">
