@@ -102,7 +102,7 @@ $('#addAula').on('click', '#saveButton', function() {
         var urlData = createAula;
         adicionaAula();
         aulaReceita_control();
-
+        // location.reload()
     } else {
         var urlData = updateAula;
         idCount();
@@ -116,6 +116,7 @@ $('#addAula').on('click', '#saveButton', function() {
             dataType: "json",
             data: aulaSerialized,
             success: function() {
+                console.log('aula criada')
                 $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
             },
             error: function() {
@@ -166,9 +167,11 @@ $('#addAula').on('click', '#saveButton', function() {
         if (idData == 0) {
             // imagina que, var lastAulaInfo = lastId;
             var lastAulaInfo = searchLastId(jsonAula, 'id_aula');
-            idData = lastAulaInfo.id_aula;
-            if (typeof(lastAulaInfo) === 'undefined') {
+
+            if (typeof lastAulaInfo === 'undefined') {
                 idData = 0;
+            } else {
+                idData = lastAulaInfo.id_aula;
             }
             idData++;
             eachReceita();
@@ -259,103 +262,6 @@ $('#addAula').on('click', '#saveButton', function() {
         );
     }
 });
-
-
-// ===================== MARCAR AULA COMO AGENDADA ===================== //
-$('#addAula').on('click', '#agendarButton', function() {
-
-    // pega id da receita
-    idData = $(this).closest('#addAula').find('.id_aula').val();
-
-    load_url();
-
-    // calculos() é chamado em /calculos/agendar_aula.js
-    calculos();
-
-    // $.map(jsonAulaReceita, function(valAulaReceita) {
-    //     if (idData == valAulaReceita.id_aula) {
-    //         calculos();
-
-
-
-    // function criaSerial() {
-    //     var ingredienteSerial = $('#reserva').serializeArray();
-
-    //     $.each(jsonIngrediente, function(index, valIngrediente) {
-    //         if (valAulaReceita.id_ingrediente == valIngrediente.id_ingrediente) {
-
-    //             ingredienteSerial.push({
-    //                 name: 'id_ingrediente',
-    //                 value: valIngrediente.id_ingrediente
-    //             }, {
-    //                 name: 'nome_ingrediente',
-    //                 value: valIngrediente.nome_ingrediente
-    //             }, {
-    //                 name: 'quantidade_calorica_ingrediente',
-    //                 value: valIngrediente.quantidade_calorica_ingrediente
-    //             }, {
-    //                 name: 'aproveitamento_ingrediente',
-    //                 value: valIngrediente.aproveitamento_ingrediente
-    //             }, {
-    //                 name: 'quantidade_estoque_ingrediente',
-    //                 value: valIngrediente.quantidade_estoque_ingrediente
-    //             }, {
-    //                 name: 'valor_ingrediente',
-    //                 value: valIngrediente.valor_ingrediente
-    //             }, {
-    //                 name: 'motivo_retirada_estoque',
-    //                 value: valIngrediente.motivo_retirada_estoque
-    //             }, {
-    //                 name: 'id_unidade_medida',
-    //                 value: valIngrediente.id_unidade_medida
-    //             })
-    //             console.log(ingredienteSerial)
-    //         }
-
-    //     })
-    // }
-
-
-
-
-    // }
-    // })
-
-    // var formAulaSerial = $('#form_addAula').serializeArray();
-
-    // formAulaSerial.push({
-    //     name: 'aula_agendada',
-    //     value: true
-    // }, {
-    //     name: 'aula_concluida',
-    //     value: false
-    // })
-
-    // $.ajax(updateAula, {
-    //     type: 'POST',
-    //     data: formAulaSerial,
-    //     dataType: 'json',
-    //     success: function() {
-    //         $('#addReceita').modal('hide')
-    //         swal({
-    //                 title: "Aula Agendada com SUCESSO!",
-    //                 type: "success",
-    //             },
-    //             function() {
-    //                 location.reload();
-    //             }
-    //         )
-    //     },
-    //     error: function() {
-    //         swal({
-    //             title: "Problemas para Agendar a aula",
-    //             type: "error",
-    //             confirmButtonText: "Ok",
-    //             confirmButtonColor: "#DD6B55",
-    //         })
-    //     }
-    // })
-})
 
 // ===================== MARCAR COMO AULA CONCLUIDA ===================== //
 $('.aulas').on('click', '.botaoAulaConcluida', function() {

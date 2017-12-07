@@ -1,4 +1,4 @@
-function calculos() {
+$('#addAula').on('click', '#agendarButton', function() {
     // cria array com as receitas da aula
     var receitaArr = [];
     var ingredienteArr = [];
@@ -76,7 +76,7 @@ function calculos() {
         })
         return getReservaAtual;
     }
-}
+})
 
 function montaJson(ingredienteArr, reservaArr, serialArr) {
     // arr armazena todos os json para ser passado pelo ajax
@@ -131,33 +131,57 @@ function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
         idData = ingredienteArr[i];
 
         load_url();
+        marcarAgendamento();
+        // $.ajax({
+        //     type: "POST",
+        //     url: updateIngrediente,
+        //     data: jsonMontado[i],
+        //     dataType: 'json',
+        //     success: function() {
+        //         $('#addAula').modal('hide')
+        //         marcarAgendamento();
+        //     },
+        //     error: function(serialArr) {
+        //         swal({
+        //             title: "Problemas ao reservar os ingredientes",
+        //             type: "error",
+        //             confirmButtonText: "Ok",
+        //             confirmButtonColor: "#DD6B55",
+        //         })
+        //     }
+        // });
+    }
 
-        $.ajax({
-                type: "POST",
-                url: updateIngrediente,
-                data: jsonMontado[i],
-                dataType: 'json',
-                success: function() {
-                    $('#addAula').modal('hide')
-                    swal({
-                            title: "SUCESSO!",
-                            type: "success",
-                        },
-                        // function() {
-                        //     location.reload();
-                        // }
-                    )
-                },
-                error: function(serialArr) {
-                    swal({
-                        title: "Problemas ao reservar os ingredientes",
-                        type: "error",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#DD6B55",
-                    })
-                }
-            }
+    function marcarAgendamento() {
+        // pega id da receita
+        idData = $(this).closest('#addAula').find('.id_aula').val();
+        console.log(idData)
+        load_url();
 
-        );
+        // $.ajax({
+        //     type: "POST",
+        //     url: updateAula,
+        //     data: jsonMontado[i],
+        //     dataType: 'json',
+        //     success: function() {
+        //         $('#addAula').modal('hide')
+        //         swal({
+        //                 title: "SUCESSO!",
+        //                 type: "success",
+        //             },
+        //             // function() {
+        //             //     location.reload();
+        //             // }
+        //         )
+        //     },
+        //     error: function(serialArr) {
+        //         swal({
+        //             title: "Problemas ao reservar os ingredientes",
+        //             type: "error",
+        //             confirmButtonText: "Ok",
+        //             confirmButtonColor: "#DD6B55",
+        //         })
+        //     }
+        // });
     }
 }
