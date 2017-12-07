@@ -8,8 +8,8 @@ $(document).ready(function () {
         var formAdicionarIngrediente = $('#form-adicionar-ingrediente');
         var ingrediente = obtemIngredienteDoFormulario(formAdicionarIngrediente);
 
-        var htmlLinha = '<tr data-teste="' + ingrediente.id + '" class="ig"><td class="info-nome"><input type="text" name="nome[]" value="' + ingrediente.nome + '" /></td><td class="info-quantidade"><input type="text" name="quantidade[]" value="' + ingrediente.quantidade + '" /></td><td class="info-unidade">' + ingrediente.unidade + '</td><td class="botao-excluir">' + ingrediente.excluir + '</td></tr>';
-
+        var htmlLinha = '<tr data-teste="' + ingrediente.id + '" class="ig"><td class="info-nome"><input hidden type="text" name="nome[]" value="' + ingrediente.nome + '" /><p> ' + ingrediente.nome + '</></td><td class="info-quantidade"><input hidden type="text" name="quantidade[]" value="' + ingrediente.quantidade + '" /><p> ' + ingrediente.quantidade + ' </p></td><td class="info-unidade">' + ingrediente.unidade + '</td><td class="botao-excluir">' + ingrediente.excluir + '</td></tr>';
+        
         var erros = validaReceita(ingrediente);
 
         if (erros.length > 0) {
@@ -18,7 +18,6 @@ $(document).ready(function () {
         } else {
             return $(".tabela-ingrediente").append(htmlLinha);
         }
-
     });
 
     // BOTAO REMOVE INGREDIENTE DA RECEITA
@@ -36,14 +35,14 @@ $(document).ready(function () {
 
     // CAPTURA OS DADOS DO FORMULARIO
     function obtemIngredienteDoFormulario(formAdicionarIngrediente) {
-        var nomeIngrediente = document.getElementById("nomeIngrediente");
+        var nomeIngredientes = document.getElementById("nomeIngredientes");
 
         // BOTAO EXCLUIR GERADO
         var htmlBotao = '<button type="button" class="excluir">Excluir</button>';
 
         var ingrediente = {
-            id: nomeIngrediente.options[nomeIngrediente.selectedIndex].value,
-            nome: nomeIngrediente.options[nomeIngrediente.selectedIndex].text,
+            id: nomeIngredientes.options[nomeIngredientes.selectedIndex].value,
+            nome: nomeIngredientes.options[nomeIngredientes.selectedIndex].text,
             quantidade: document.getElementById("quantidade").value,
             unidade: document.querySelector("#unidade").textContent,
             excluir: htmlBotao
@@ -60,7 +59,7 @@ $(document).ready(function () {
         if (ingrediente.quantidade == 0 || ingrediente.quantidade == "") {
             erros.push("A QUANTIDADE do ingrediente não pode ser em branco");
         }
-        if (document.getElementById("nomeIngrediente").selectedIndex == "0") {
+        if (document.getElementById("nomeIngredientes").selectedIndex == "0") {
             erros.push("SELECIONE o ingrediente");
         }
         if (idx != -1) {
