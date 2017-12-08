@@ -1,15 +1,17 @@
 function validacao_agenda_aula(ingredienteArr, reservaArr, serialArr) {
     // garante uue Json Unidades foi baixado
     if (typeof jsonUnidadeMedida === 'undefined' || typeof jsonIngrediente === 'undefined') {
-        $.getJSON(listUnidadeMedida, function(jsonObjectUnidade) {
+        $.getJSON(listUnidadeMedida, function (jsonObjectUnidade) {
             jsonUnidade = jsonObjectUnidade;
-            $.getJSON(listIngrediente, function(jsonObjectIngredientes) {
+            $.getJSON(listIngrediente, function (jsonObjectIngredientes) {
                 jsonIngrediente = jsonObjectIngredientes;
                 mainErros(ingredienteArr, reservaArr, serialArr)
             })
         })
     } else {
         mainErros(ingredienteArr, reservaArr, serialArr)
+        marcarAgendamento(idDataTemp);
+
     }
 
     function mainErros(ingredienteArr, reservaArr, serialArr) {
@@ -38,7 +40,7 @@ function validaReserva(ingredienteArr, reservaArr) {
     function populaMaisArrays() {
         // popula arrays qtdReservaAtualArr e qtdEstoqueArr
         for (var i = 0; i < ingredienteArr.length; i++) {
-            $.map(jsonIngrediente, function(valIngrediente) {
+            $.map(jsonIngrediente, function (valIngrediente) {
                 if (valIngrediente.id_ingrediente == ingredienteArr[i]) {
                     var qtdReservaAtual = valIngrediente.quantidade_reservada_ingrediente;
                     var qtdEstoque = valIngrediente.quantidade_estoque_ingrediente;
@@ -59,7 +61,7 @@ function validaReserva(ingredienteArr, reservaArr) {
 
     function populaUnidadeArr(unidadeArr) {
         for (var k = 0; k < unidadeArr.length; k++) {
-            $.map(jsonUnidade, function(valUnidade) {
+            $.map(jsonUnidade, function (valUnidade) {
                 if (valUnidade.id_unidade_medida == unidadeArr[k]) {
                     var stringUnidade = valUnidade.simbolo_unidade_medida;
                     stringUnidadeArr.push(stringUnidade);
@@ -70,8 +72,8 @@ function validaReserva(ingredienteArr, reservaArr) {
     }
 
     // VALIDAÇAO AQUI
-    for (var j = 0; j > ingredienteArr.length; j++) {
-        if (reservaArr[j] < qtdEstoqueArr[j]) {
+    for (var j = 0; j < ingredienteArr.length; j++) {
+        if (reservaArr[j] > qtdEstoqueArr[j]) {
             var qtdFaltante = reservaArr[j] - qtdEstoqueArr[j];
             erros.push("Faltam " + qtdFaltante + "" + stringUnidadeArr[j] + " de " + nomeIngredienteArr[j] + " no estoque!")
         }
@@ -83,7 +85,7 @@ function validaReserva(ingredienteArr, reservaArr) {
 function buscaUnidadeMedida(ingredienteArr) {
     var tipoUnidade;
 
-    $.map(jsonUnidade, function(valUnidade) {
+    $.map(jsonUnidade, function (valUnidade) {
         if (valUnidade.id_unidade_medida == idIngrediente) {
             tipoUnidade = valUnidade.simbolo_unidade_medida;
         }
@@ -96,7 +98,7 @@ function exibeMensagensDeErro(erros) {
 
     ul.innerHTML = "";
 
-    erros.forEach(function(erro) {
+    erros.forEach(function (erro) {
         var li = document.createElement("li");
         li.textContent = erro;
         ul.appendChild(li);

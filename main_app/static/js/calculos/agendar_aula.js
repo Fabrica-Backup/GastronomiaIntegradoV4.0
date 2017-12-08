@@ -1,4 +1,4 @@
-$('#addAula').on('click', '#agendarButton', function() {
+$('#addAula').on('click', '#agendarButton', function () {
     // pega id da receita
     idData = $(this).closest('#addAula').find('.id_aula').val();
 
@@ -10,9 +10,9 @@ $('#addAula').on('click', '#agendarButton', function() {
 
     // garante que a associativa receita_ingrediente foi baixado
     if (typeof jsonReceitaIngrediente === 'undefined' || typeof jsonIngrediente === 'undefined') {
-        $.getJSON(listReceitaIngrediente, function(jsonObjectReceitaIngrediente) {
+        $.getJSON(listReceitaIngrediente, function (jsonObjectReceitaIngrediente) {
             jsonReceitaIngrediente = jsonObjectReceitaIngrediente;
-            $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
+            $.getJSON(listIngrediente, function (jsonObjectIngrediente) {
                 jsonIngrediente = jsonObjectIngrediente;
                 populaArrays();
             })
@@ -23,7 +23,7 @@ $('#addAula').on('click', '#agendarButton', function() {
 
     function populaArrays() {
         // popula receitaArr com as id das receitas
-        $.each(jsonAulaReceita, function(index, valAulaReceita) {
+        $.each(jsonAulaReceita, function (index, valAulaReceita) {
             if (valAulaReceita.id_aula == idData) {
                 receitaArr.push(valAulaReceita.id_receita);
             }
@@ -31,7 +31,7 @@ $('#addAula').on('click', '#agendarButton', function() {
 
         // popula receitaArr
         for (i = 0; i < receitaArr.length; i++) {
-            $.map(jsonReceitaIngrediente, function(valReceitaIngrediente) {
+            $.map(jsonReceitaIngrediente, function (valReceitaIngrediente) {
                 if (valReceitaIngrediente.id_receita == receitaArr[i]) {
 
                     // qtdIngrediente_receita é a quantidade de ingredientes usado para a receita especifica
@@ -72,7 +72,7 @@ $('#addAula').on('click', '#agendarButton', function() {
 
     function pegaIngredientesReservados(idIngrediente) {
         var getReservaAtual;
-        $.map(jsonIngrediente, function(valIngrediente) {
+        $.map(jsonIngrediente, function (valIngrediente) {
             if (valIngrediente.id_ingrediente == idIngrediente) {
                 getReservaAtual = valIngrediente.quantidade_reservada_ingrediente;
             }
@@ -81,7 +81,7 @@ $('#addAula').on('click', '#agendarButton', function() {
     }
 })
 
-function montaJson(ingredienteArr, reservaArr, serialArr) {
+function montaJsonAgenda(ingredienteArr, reservaArr, serialArr) {
     // arr armazena todos os json para ser passado pelo ajax
     var arr = [];
     for (var i = 0; i < ingredienteArr.length; i++) {
@@ -91,7 +91,7 @@ function montaJson(ingredienteArr, reservaArr, serialArr) {
     }
 
     function completaJson(serialArray, i) {
-        $.map(jsonIngrediente, function(valIngrediente) {
+        $.map(jsonIngrediente, function (valIngrediente) {
             if (ingredienteArr[i] == valIngrediente.id_ingrediente) {
 
                 serialArray.push({
@@ -130,7 +130,7 @@ function montaJson(ingredienteArr, reservaArr, serialArr) {
 }
 
 function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
-    var jsonMontado = montaJson(ingredienteArr, reservaArr, serialArr);
+    var jsonMontado = montaJsonAgenda(ingredienteArr, reservaArr, serialArr);
     var idDataTemp = idData;
 
     console.log('jsonMontado', jsonMontado)
@@ -145,18 +145,17 @@ function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
             url: updateIngrediente,
             data: jsonMontado[i],
             dataType: 'json',
-            success: function() {
+            success: function () {
                 $('#addAula').modal('hide')
-                marcarAgendamento(idDataTemp);
             },
-            error: function(serialArr) {
+            error: function (serialArr) {
                 swal({
                         title: "Problemas ao reservar os ingredientes",
                         type: "error",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#DD6B55",
                     },
-                    function() {
+                    function () {
                         location.reload()
                     }
                 )
@@ -185,25 +184,25 @@ function marcarAgendamento(idDataTemp) {
         url: updateAula,
         data: aulaSerial,
         dataType: 'json',
-        success: function() {
+        success: function () {
             $('#addAula').modal('hide')
             swal({
                     title: "SUCESSO!",
                     type: "success",
                 },
-                function() {
+                function () {
                     location.reload();
                 }
             )
         },
-        error: function() {
+        error: function () {
             swal({
                     title: "Problemas ao reservar os ingredientes",
                     type: "error",
                     confirmButtonText: "Ok",
                     confirmButtonColor: "#DD6B55",
                 },
-                function() {
+                function () {
                     location.reload();
                 }
             )
