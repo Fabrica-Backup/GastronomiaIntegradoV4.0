@@ -117,12 +117,20 @@ $('#addAula').on('click', '#saveButton', function() {
             data: aulaSerialized,
             success: function() {
                 console.log('aula criada')
-                $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
+                    // $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
             },
             error: function() {
-                console.log("problemas ao criar aula");
-                $('#mensagens-erro-aula').append('Problemas ao criar aula');
-            },
+                swal({
+                        title: "Problemas para criar aula",
+                        type: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#DD6B55",
+                    },
+                    function() {
+                        location.reload();
+                    }
+                )
+            }
         });
     }
 
@@ -214,8 +222,17 @@ $('#addAula').on('click', '#saveButton', function() {
                 eachReceita(idData);
             },
             error: function() {
-                $('#mensagens-erro').append('Problemas ao adicionar receitas na aula');
-            },
+                swal({
+                        title: "Problemas ao editar aula",
+                        type: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#DD6B55",
+                    },
+                    function() {
+                        location.reload();
+                    }
+                )
+            }
         });
     }
     // serializa o form_muito_porco do html e adiciona a ID da aula, ele da post para cada receita individualmente na associativa
@@ -251,11 +268,15 @@ $('#addAula').on('click', '#saveButton', function() {
                 },
                 error: function() {
                     swal({
-                        title: "Problemas na inserção das receitas na aula",
-                        type: "error",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#DD6B55",
-                    })
+                            title: "Problemas na inserção das receitas na aula",
+                            type: "error",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#DD6B55",
+                        },
+                        function() {
+                            location.reload();
+                        }
+                    )
                 }
             }
 
@@ -264,78 +285,77 @@ $('#addAula').on('click', '#saveButton', function() {
 });
 
 // ===================== MARCAR COMO AULA CONCLUIDA ===================== //
-$('.aulas').on('click', '.botaoAulaConcluida', function() {
-    // pega id da receita
-    idData = $(this).closest('tr').data('id');
+// $('.aulas').on('click', '.botaoAulaConcluida', function() {
+//     // pega id da receita
+//     idData = $(this).closest('tr').data('id');
 
-    load_url();
+//     load_url();
 
-    var formAulaSerial = $('#form_addAula').serializeArray();
+//     var formAulaSerial = $('#form_addAula').serializeArray();
 
-    $.map(jsonAula, function(valAula) {
-        if (idData == valAula.id_aula) {
+//     $.map(jsonAula, function(valAula) {
+//         if (idData == valAula.id_aula) {
 
-            formAulaSerial.push({
-                name: 'nome_aula',
-                value: valAula.nome_aula
-            }, {
-                name: 'descricao_aula',
-                value: valAula.descricao_aula
-            }, {
-                name: 'data_aula',
-                value: valAula.data_aula
-            }, {
-                name: 'periodo_aula',
-                value: valAula.periodo_aula
-            }, {
-                name: 'aula_agendada',
-                value: true
-            }, {
-                name: 'aula_concluida',
-                value: true
-            })
-            return aulaConcluida(formAulaSerial);
-        }
-    })
+//             formAulaSerial.push({
+//                 name: 'nome_aula',
+//                 value: valAula.nome_aula
+//             }, {
+//                 name: 'descricao_aula',
+//                 value: valAula.descricao_aula
+//             }, {
+//                 name: 'data_aula',
+//                 value: valAula.data_aula
+//             }, {
+//                 name: 'periodo_aula',
+//                 value: valAula.periodo_aula
+//             }, {
+//                 name: 'aula_agendada',
+//                 value: true
+//             }, {
+//                 name: 'aula_concluida',
+//                 value: true
+//             })
+//             return aulaConcluida(formAulaSerial);
+//         }
+//     })
 
-    function aulaConcluida(formAulaSerial) {
+//     function aulaConcluida(formAulaSerial) {
 
-        swal({
-                title: "Marcar esta aula como Concluida?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Sim",
-                closeOnConfirm: false,
-            },
-            function() {
-                $.ajax(updateAula, {
-                    type: 'POST',
-                    data: formAulaSerial,
-                    dataType: 'json',
-                    success: function() {
-                        swal({
-                                title: "Aula Concluida!",
-                                type: "success",
-                            },
-                            function() {
-                                location.reload();
-                            }
-                        )
-                    },
-                    error: function() {
-                        swal({
-                            title: "Problemas para concluir a aula",
-                            type: "error",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: "#DD6B55",
-                        })
-                    }
-                })
-            }
-        );
-    }
-
-});
+//         swal({
+//                 title: "Marcar esta aula como Concluida?",
+//                 type: "warning",
+//                 showCancelButton: true,
+//                 confirmButtonText: "Sim",
+//                 closeOnConfirm: false,
+//             },
+//             function() {
+//                 $.ajax(updateAula, {
+//                     type: 'POST',
+//                     data: formAulaSerial,
+//                     dataType: 'json',
+//                     success: function() {
+//                         swal({
+//                                 title: "Aula Concluida!",
+//                                 type: "success",
+//                             },
+//                             function() {
+//                                 location.reload();
+//                             }
+//                         )
+//                     },
+//                     error: function() {
+//                         swal({
+//                             title: "Problemas para concluir a aula",
+//                             type: "error",
+//                             confirmButtonText: "Ok",
+//                             confirmButtonColor: "#DD6B55",
+//                         })
+//                     }
+//                 })
+//             }
+//         );
+//     }
+// });
 
 // ===================== DELETE ===================== //
 $('.aulas').on('click', '.excluir', function() {

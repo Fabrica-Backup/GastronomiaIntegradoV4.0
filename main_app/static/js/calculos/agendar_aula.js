@@ -1,4 +1,7 @@
 $('#addAula').on('click', '#agendarButton', function() {
+    // pega id da receita
+    idData = $(this).closest('#addAula').find('.id_aula').val();
+
     // cria array com as receitas da aula
     var receitaArr = [];
     var ingredienteArr = [];
@@ -104,6 +107,9 @@ function montaJson(ingredienteArr, reservaArr, serialArr) {
                     name: 'quantidade_reservada_ingrediente',
                     value: reservaArr[i]
                 }, {
+                    name: 'quantidade_estoque_ingrediente',
+                    value: 0
+                }, {
                     name: 'valor_ingrediente',
                     value: valIngrediente.valor_ingrediente
                 }, {
@@ -125,63 +131,82 @@ function montaJson(ingredienteArr, reservaArr, serialArr) {
 
 function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
     var jsonMontado = montaJson(ingredienteArr, reservaArr, serialArr);
+    var idDataTemp = idData;
 
     console.log('jsonMontado', jsonMontado)
     for (var i = 0; i < jsonMontado.length; i++) {
         idData = ingredienteArr[i];
 
         load_url();
-        marcarAgendamento();
-        // $.ajax({
-        //     type: "POST",
-        //     url: updateIngrediente,
-        //     data: jsonMontado[i],
-        //     dataType: 'json',
-        //     success: function() {
-        //         $('#addAula').modal('hide')
-        //         marcarAgendamento();
-        //     },
-        //     error: function(serialArr) {
-        //         swal({
-        //             title: "Problemas ao reservar os ingredientes",
-        //             type: "error",
-        //             confirmButtonText: "Ok",
-        //             confirmButtonColor: "#DD6B55",
-        //         })
-        //     }
-        // });
-    }
+        console.log(updateIngrediente)
 
-    function marcarAgendamento() {
-        // pega id da receita
-        idData = $(this).closest('#addAula').find('.id_aula').val();
-        console.log(idData)
-        load_url();
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: updateAula,
-        //     data: jsonMontado[i],
-        //     dataType: 'json',
-        //     success: function() {
-        //         $('#addAula').modal('hide')
-        //         swal({
-        //                 title: "SUCESSO!",
-        //                 type: "success",
-        //             },
-        //             // function() {
-        //             //     location.reload();
-        //             // }
-        //         )
-        //     },
-        //     error: function(serialArr) {
-        //         swal({
-        //             title: "Problemas ao reservar os ingredientes",
-        //             type: "error",
-        //             confirmButtonText: "Ok",
-        //             confirmButtonColor: "#DD6B55",
-        //         })
-        //     }
-        // });
+        $.ajax({
+            type: "POST",
+            url: updateIngrediente,
+            data: jsonMontado[i],
+            dataType: 'json',
+            success: function() {
+                $('#addAula').modal('hide')
+                marcarAgendamento(idDataTemp);
+            },
+            error: function(serialArr) {
+                swal({
+                        title: "Problemas ao reservar os ingredientes",
+                        type: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#DD6B55",
+                    },
+                    function() {
+                        location.reload()
+                    }
+                )
+            }
+        });
     }
+    marcarAgendamento(idDataTemp);
+}
+
+function marcarAgendamento(idDataTemp) {
+    idData = idDataTemp;
+    load_url();
+    console.log(updateAula)
+
+    var aulaSerial = $('#form_addAula').serializeArray();
+    aulaSerial.push({
+        name: 'aula_agendada',
+        value: true
+    }, {
+        name: 'aula_concluida',
+        value: false
+    })
+    console.log(aulaSerial)
+    $.ajax({
+        type: "POST",
+        url: updateAula,
+        data: aulaSerial,
+        dataType: 'json',
+        success: function() {
+            $('#addAula').modal('hide')
+            swal({
+                    title: "SUCESSO!",
+                    type: "success",
+                },
+                function() {
+                    location.reload();
+                }
+            )
+        },
+        error: function() {
+            swal({
+                    title: "Problemas ao reservar os ingredientes",
+                    type: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "#DD6B55",
+                },
+                function() {
+                    location.reload();
+                }
+            )
+        }
+    });
 }
