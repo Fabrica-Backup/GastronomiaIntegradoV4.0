@@ -2,13 +2,13 @@
 // verifica se foi dado get das receitas, aulas e periodo, caso nao tenha dado ele dará get aqui
 if (typeof jsonAula === 'undefined' || typeof jsonReceita === 'undefined' || typeof jsonPeriodo === 'undefined') {
     // get da tabela de aulas 
-    $.getJSON(listAula, function(jsonObjectAula) {
+    $.getJSON(listAula, function (jsonObjectAula) {
         jsonAula = jsonObjectAula;
         // get da tabela de receitas
-        $.getJSON(listReceita, function(jsonObjectReceita) {
+        $.getJSON(listReceita, function (jsonObjectReceita) {
             jsonReceita = jsonObjectReceita;
             // get da tabela associativa aula_receita
-            $.getJSON(listAulaReceita, function(jsonObjectAulaReceita) {
+            $.getJSON(listAulaReceita, function (jsonObjectAulaReceita) {
                 jsonAulaReceita = jsonObjectAulaReceita;
                 getTabela(jsonAula, jsonReceita, jsonAulaReceita);
             })
@@ -30,10 +30,10 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
     var novaId = 0;
     var velhaId = 0;
 
-    $.each(jsonAula, function(indexAula, valAula) {
+    $.each(jsonAula, function (indexAula, valAula) {
         novaId = valAula.id_aula;
 
-        $.each(jsonAulaReceita, function(indexAulaReceitas, valueAulaReceitas) {
+        $.each(jsonAulaReceita, function (indexAulaReceitas, valueAulaReceitas) {
             if (novaId != velhaId) {
                 // conta o numero de receitas na aula
                 var countReceitas = Object.keys(valAula.receitas).length;
@@ -73,14 +73,11 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
                 }
             }
         })
-
-
     })
-
 }
 
 // ===================== POST PUT ===================== //
-$('#addAula').on('click', '#saveButton', function() {
+$('#addAula').on('click', '#saveButton', function () {
 
     var formAula = $('#form_addAula');
 
@@ -102,7 +99,6 @@ $('#addAula').on('click', '#saveButton', function() {
         var urlData = createAula;
         adicionaAula();
         aulaReceita_control();
-        // location.reload()
     } else {
         var urlData = updateAula;
         idCount();
@@ -115,18 +111,18 @@ $('#addAula').on('click', '#saveButton', function() {
             url: urlData,
             dataType: "json",
             data: aulaSerialized,
-            success: function() {
+            success: function () {
                 console.log('aula criada')
-                    // $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
+                // $('#mensagens-sucesso-aula').append('Aula criado com sucesso!');
             },
-            error: function() {
+            error: function () {
                 swal({
                         title: "Problemas para criar aula",
                         type: "error",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#DD6B55",
                     },
-                    function() {
+                    function () {
                         location.reload();
                     }
                 )
@@ -136,37 +132,47 @@ $('#addAula').on('click', '#saveButton', function() {
 
     // chama a funçao deleteReceita() para apagar tudo com id_aula especifica, em seguida chama a funçao adicionaReceita()
     function idCount() {
-        var idAssoc;
-        $.map(jsonAulaReceita, function(valueAulaReceitas) {
-            if (valueAulaReceitas.id_aula == idData) {
-                idAssoc = valueAulaReceitas.id_aula_receita;
-                return deleteReceita(idAssoc);
+        var idAssoc = [];
+        var idDataTemp = idData;
+
+        // cria array das primary key de aula_receita
+        $.map(jsonAulaReceita, function (valAulaReceita) {
+            if (valAulaReceita.id_aula == idData) {
+                idAssoc.push(valAulaReceita.id_aula_receita);
             }
         })
-        return aulaReceita_control();
+        deleteReceita(idAssoc);
+
+        // retorna a id da aula para idData
+        idData = idDataTemp;
+
+        aulaReceita_control();
     }
 
     //EDIT
     // Remove a associação da aula especifica
     function deleteReceita(idAssoc) {
-        var idDataTemp = idData;
-        idData = idAssoc;
-        load_url();
 
-        $.ajax(deleteAulaReceita, {
-            type: 'DELETE',
-            data: {
-                "id_aula_receita": idAssoc
-            },
-            dataType: 'json',
-            success: function() {
-                console.log("Receita da associativa removido");
-                idData = idDataTemp;
-            },
-            error: function() {
-                console.log("Problemas para remover as receitas da associativa");
-            }
-        })
+        for (var i = 0; i < idAssoc.length; i++) {
+
+            idData = idAssoc[i];
+            load_url();
+
+            $.ajax(deleteAulaReceita, {
+                type: 'DELETE',
+                data: {
+                    "id_aula_receita": idAssoc
+                },
+                dataType: 'json',
+                success: function () {
+                    console.log("Receita da associativa removido");
+                },
+                error: function () {
+                    console.log("Problemas para remover as receitas da associativa");
+                }
+            })
+        }
+
     }
 
     // Adiciona todas as Receitas da aula
@@ -217,18 +223,18 @@ $('#addAula').on('click', '#saveButton', function() {
             url: updateAula,
             data: aulaSerialized,
             dataType: 'json',
-            success: function() {
+            success: function () {
                 console.log('editou aula');
                 eachReceita(idData);
             },
-            error: function() {
+            error: function () {
                 swal({
                         title: "Problemas ao editar aula",
                         type: "error",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#DD6B55",
                     },
-                    function() {
+                    function () {
                         location.reload();
                     }
                 )
@@ -255,25 +261,25 @@ $('#addAula').on('click', '#saveButton', function() {
                 url: createAulaReceita,
                 data: receita,
                 dataType: 'json',
-                success: function() {
+                success: function () {
                     $('#addAula').modal('hide')
                     swal({
                             title: "SUCESSO!",
                             type: "success",
                         },
-                        function() {
+                        function () {
                             location.reload();
                         }
                     )
                 },
-                error: function() {
+                error: function () {
                     swal({
                             title: "Problemas na inserção das receitas na aula",
                             type: "error",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#DD6B55",
                         },
-                        function() {
+                        function () {
                             location.reload();
                         }
                     )
@@ -284,81 +290,8 @@ $('#addAula').on('click', '#saveButton', function() {
     }
 });
 
-// ===================== MARCAR COMO AULA CONCLUIDA ===================== //
-// $('.aulas').on('click', '.botaoAulaConcluida', function() {
-//     // pega id da receita
-//     idData = $(this).closest('tr').data('id');
-
-//     load_url();
-
-//     var formAulaSerial = $('#form_addAula').serializeArray();
-
-//     $.map(jsonAula, function(valAula) {
-//         if (idData == valAula.id_aula) {
-
-//             formAulaSerial.push({
-//                 name: 'nome_aula',
-//                 value: valAula.nome_aula
-//             }, {
-//                 name: 'descricao_aula',
-//                 value: valAula.descricao_aula
-//             }, {
-//                 name: 'data_aula',
-//                 value: valAula.data_aula
-//             }, {
-//                 name: 'periodo_aula',
-//                 value: valAula.periodo_aula
-//             }, {
-//                 name: 'aula_agendada',
-//                 value: true
-//             }, {
-//                 name: 'aula_concluida',
-//                 value: true
-//             })
-//             return aulaConcluida(formAulaSerial);
-//         }
-//     })
-
-//     function aulaConcluida(formAulaSerial) {
-
-//         swal({
-//                 title: "Marcar esta aula como Concluida?",
-//                 type: "warning",
-//                 showCancelButton: true,
-//                 confirmButtonText: "Sim",
-//                 closeOnConfirm: false,
-//             },
-//             function() {
-//                 $.ajax(updateAula, {
-//                     type: 'POST',
-//                     data: formAulaSerial,
-//                     dataType: 'json',
-//                     success: function() {
-//                         swal({
-//                                 title: "Aula Concluida!",
-//                                 type: "success",
-//                             },
-//                             function() {
-//                                 location.reload();
-//                             }
-//                         )
-//                     },
-//                     error: function() {
-//                         swal({
-//                             title: "Problemas para concluir a aula",
-//                             type: "error",
-//                             confirmButtonText: "Ok",
-//                             confirmButtonColor: "#DD6B55",
-//                         })
-//                     }
-//                 })
-//             }
-//         );
-//     }
-// });
-
 // ===================== DELETE ===================== //
-$('.aulas').on('click', '.excluir', function() {
+$('.aulas').on('click', '.excluir', function () {
     var thisTr = $(this).closest('tr');
     idData = thisTr.data('id');
 
@@ -372,21 +305,21 @@ $('.aulas').on('click', '.excluir', function() {
             confirmButtonText: "Deletar!",
             closeOnConfirm: false,
         },
-        function() {
+        function () {
             $.ajax(deleteAula, {
                 type: 'DELETE',
                 data: {
                     "id_aula": idData
                 },
                 dataType: 'json',
-                success: function() {
+                success: function () {
                     swal({
                             title: "Aula removido com sucesso!",
                             type: "success",
                         }),
                         $(thisTr).remove();
                 },
-                error: function() {
+                error: function () {
                     swal({
                         title: "Problemas ao remover a aula",
                         type: 'error',
