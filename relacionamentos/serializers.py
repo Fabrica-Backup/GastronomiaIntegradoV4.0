@@ -208,7 +208,7 @@ class ListIngredienteSerializer(serializers.ModelSerializer):
             'quantidade_calorica_ingrediente',
             'aproveitamento_ingrediente',
             'quantidade_estoque_ingrediente',
-            #'quantidade_reservada_ingrediente',
+            'quantidade_reservada_ingrediente',
             'valor_ingrediente',
             'motivo_retirada_estoque',
             'id_unidade_medida'
