@@ -221,6 +221,8 @@ function montaJson(idIngredienteArr, qtdTotalUsadaArr, qtdTotalReservadaArr) {
 
 function ajaxConcluirAula(ingredienteSerialArr, aulaSerial) {
 
+    load_url();
+
     swal({
             title: "Marcar esta aula como Concluida?",
             type: "warning",
@@ -239,7 +241,7 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial) {
                     },
                     error: function () {
                         swal({
-                            title: "Problemas ao fazer calculo nos ingredientes da aula",
+                            title: "Problemas no update dos ingredientes da aula",
                             type: "error",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#DD6B55",
@@ -274,10 +276,5 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial) {
                 })
             }
         }
-
-
-
-
-
     );
 }
