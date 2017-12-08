@@ -1,12 +1,16 @@
 from decimal import *
+
+from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
-from unidades_medida.serializers import UnidadeMedidaSerializer
+
 from categorias.serializers import CategoriaSerializer
 from classificacoes.serializers import ClassificacaoSerializer
-from .models import Aula, Ingrediente, Receita, ReceitaIngrediente, AulaReceita
-from django.db import transaction
 from drf_writable_nested import WritableNestedModelSerializer
+from unidades_medida.serializers import UnidadeMedidaSerializer
 
+
+from .models import Aula, AulaReceita, Ingrediente, Receita, ReceitaIngrediente
 
 
 #serializer da receita
@@ -79,6 +83,7 @@ class EditReceitaSerializer(serializers.ModelSerializer):
 #serializers da aula 
 class CreateAulaSerializer(serializers.ModelSerializer):
 
+    #data_aula = serializers.DateField(default=timezone.now)
     receitas = ListReceitaSerializer(many=True, read_only=True)
     class Meta:
         model = Aula
@@ -98,6 +103,7 @@ class CreateAulaSerializer(serializers.ModelSerializer):
 
 class ListAulaSerializer(serializers.ModelSerializer):
     
+
     receitas = ListReceitaSerializer(many=True, read_only=True)
     class Meta:
         model = Aula
@@ -113,6 +119,7 @@ class ListAulaSerializer(serializers.ModelSerializer):
         ]
 
 class EditAulaSerializer(serializers.ModelSerializer):
+
     
     receitas = ListReceitaSerializer(many=True, read_only=True)
     class Meta:
@@ -135,6 +142,7 @@ class EditAulaSerializer(serializers.ModelSerializer):
 
 #serializers da aula receita 
 class AulaReceitaSerializer(WritableNestedModelSerializer):
+
     class Meta:
         model = AulaReceita
         fields = [
@@ -217,7 +225,7 @@ class EditIngredienteSerializer(serializers.ModelSerializer):
             'quantidade_calorica_ingrediente',
             'aproveitamento_ingrediente',
             'quantidade_estoque_ingrediente',
-            #'quantidade_reservada_ingrediente',
+            'quantidade_reservada_ingrediente',
             'valor_ingrediente',
             'motivo_retirada_estoque',
             'id_unidade_medida'
@@ -228,6 +236,7 @@ class EditIngredienteSerializer(serializers.ModelSerializer):
     def validate(self, data):
         quantidade_calorica_ingrediente = Decimal(data['quantidade_calorica_ingrediente'])
         aproveitamento_ingrediente = Decimal(data['aproveitamento_ingrediente'])
+        quantidade_reservada_ingrediente = Decimal(data['quantidade_reservada_ingrediente'])
         valor_ingrediente = Decimal(data['valor_ingrediente'])
 
         if quantidade_calorica_ingrediente < 0:
@@ -236,6 +245,8 @@ class EditIngredienteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('O Campo aproveitamento não pode ser negativo')
         elif aproveitamento_ingrediente > 100:
             raise serializers.ValidationError('O aproveitamento não pode ser acima de 100')
+        elif quantidade_reservada_ingrediente < 0:
+            raise serializers.ValidationError('A quantidade reservada não pode ser negativa')
         elif valor_ingrediente < 0:
             raise serializers.ValidationError('O campo valor ingrediente não pode ser negativo')
         return data
@@ -244,6 +255,7 @@ class EditIngredienteSerializer(serializers.ModelSerializer):
         instance.nome_ingrediente = validated_data.get('nome_ingrediente', instance.nome_ingrediente)
         instance.quantidade_calorica_ingrediente = validated_data.get('quantidade_calorica_ingrediente', instance.quantidade_calorica_ingrediente)
         instance.aproveitamento_ingrediente = validated_data.get('aproveitamento_ingrediente', instance.aproveitamento_ingrediente)
+        instance.quantidade_reservada_ingrediente = validated_data.get('quantidade_reservada_ingrediente', instance.quantidade_reservada_ingrediente)
         instance.valor_ingrediente = validated_data.get('valor_ingrediente', instance.valor_ingrediente)
         instance.motivo_retirada_estoque = validated_data.get('motivo_retirada_estoque', instance.motivo_retirada_estoque)
         
@@ -265,6 +277,3 @@ class EditIngredienteSerializer(serializers.ModelSerializer):
             quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', instance.quantidade_estoque_ingrediente)
         instance.save()
         return instance
-
-
-
