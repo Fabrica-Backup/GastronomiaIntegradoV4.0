@@ -330,120 +330,140 @@ $('.aulas').on('click', '.excluir', function () {
     );
 });
 
-
 // === === === === === == CLONAR AULA === === === === === === == //
-// $('#verAula').on('click', '.clonar', function () {
-//     // xunxo para pegar a id da aula
-//     var idAula = $(this).closest('.modal-body').find('.receitasQuantidade').find('tr').data('id');
-//     $.each(jsonAula, function (indexAula, valueAula) {
-//         // formulario não existe, criando um array serializado vazio
-//         var aulaCloneSerial = $('#form_addAula').serializeArray();
+$('#verAula').on('click', '.clonar', function () {
+    // xunxo para pegar a id da aula
+    var idAula = $(this).closest('.modal-body').find('.receitasQuantidade').find('tr').data('id');
 
-//         if (valueAula.id_aula == idAula) {
-//             var objClone = new Object();
-//             objClone.id_aula = '';
-//             objClone.nome_aula = valueAula.nome_aula + ' CLONE';
-//             objClone.descricao_aula = valueAula.descricao_aula;
-//             objClone.data_aula = '';
-//             objClone.periodo_aula = valueAula.periodo_aula;
-//             objClone.aula_concluida = 'false';
-//             objClone.aula_agendada = 'false';
+    // formulario não existe, criando um array serializado vazio
+    var aulaCloneSerial = $('#idNaoExiste').serializeArray();
 
-//             // inserindo todos os dados da aula a ser clonada dentro da array serializado vazio
-//             aulaCloneSerial.push(objClone);
+    $.map(jsonAula, function (valueAula) {
+        if (valueAula.id_aula == idAula) {
+            var objClone = new Object();
+            objClone.id_aula = '';
+            objClone.nome_aula = valueAula.nome_aula + ' CLONE';
+            objClone.descricao_aula = valueAula.descricao_aula;
+            objClone.data_aula = '';
+            objClone.periodo_aula = valueAula.periodo_aula;
+            objClone.aula_concluida = 'false';
+            objClone.aula_agendada = 'false';
 
-//             return cloneAulaPost(objClone)
-//         }
+            // inserindo todos os dados da aula a ser clonada dentro da array serializado vazio
+            aulaCloneSerial.push(objClone);
 
-//         function cloneAulaPost(objClone) {
-//             load_url();
-//             console.log(objClone)
-//             swal({
-//                     title: "Clonar esta aula?",
-//                     type: "warning",
-//                     showCancelButton: true,
-//                     confirmButtonText: "Clonar",
-//                     closeOnConfirm: false,
-//                 },
-//                 function () {
-//                     $.ajax(createAula, {
-//                         type: 'POST',
-//                         data: objClone,
-//                         dataType: 'json',
-//                         success: function () {
-//                             console.log('aula clonada')
-//                             clonaReceitas(idAula);
-//                         },
-//                         error: function () {
-//                             swal({
-//                                 title: "Problemas ao clonar aula",
-//                                 type: "warning",
-//                                 confirmButtonText: "Vish Maria",
-//                                 confirmButtonColor: "#DD6B55",
-//                             })
-//                         },
-//                     })
-//                 }
-//             );
-//         }
+            cloneAulaPost(objClone)
+        }
+    })
 
-//         function clonaReceitas(idAula) {
-//             // insere a ultima id_aula criada na variavel
-//             var lastIdObj = searchLastId(jsonAula, 'id_aula');
-//             var lastId = lastIdObj.id_aula;
-//             lastId++;
 
-//             // pega a id da aula que acabou de ser clonada
-//             function searchLastId(arr, prop) {
+    function cloneAulaPost(objClone) {
+        load_url();
+        console.log(objClone)
+        swal({
+                title: "Clonar esta aula?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Clonar",
+                closeOnConfirm: false,
+            },
+            function () {
+                $.ajax(createAula, {
+                    type: 'POST',
+                    data: objClone,
+                    dataType: 'json',
+                    success: function () {
+                        console.log('aula clonada')
+                        clonaReceitas();
+                    },
+                    error: function () {
+                        swal({
+                                title: "Problemas ao clonar aula",
+                                type: "warning",
+                                confirmButtonText: "Vish Maria",
+                                confirmButtonColor: "#DD6B55",
+                            },
+                            location.reload())
+                    },
+                })
+            }
+        );
+    }
 
-//                 var lastId;
-//                 for (var i = 0; i < arr.length; i++) {
-//                     if (!lastId || parseInt(arr[i][prop]) > parseInt(lastId[prop]))
-//                         lastId = arr[i];
-//                 }
-//                 return lastId;
-//             }
+    function clonaReceitas() {
+        // insere a ultima id_aula criada na variavel
+        var lastIdObj = searchLastId(jsonAula, 'id_aula');
+        var lastId = lastIdObj.id_aula;
+        lastId++;
 
-//             $.each(jsonAulaReceita, function (index, valueAulaReceitas) {
-//                 // formulario não existe, criando um array serializado vazio
-//                 var receitaCloneSerial = $('#form_addAula').serializeArray();
-//                 if (valueAulaReceitas.id_aula == idAula) {
-//                     var objCloneReceita = new Object();
-//                     objCloneReceita.id_aula = lastId;
-//                     objCloneReceita.id_receita = valueAulaReceitas.id_receita;
-//                     objCloneReceita.quantidade_receita = valueAulaReceitas.quantidade_receita;
+        var cloneArr = cloneArray();
+        console.log(cloneArr)
+        clonaReceitasPost(cloneArr);
 
-//                     receitaCloneSerial.push(objCloneReceita);
-//                     clonaReceitasPost(receitaCloneSerial);
-//                 }
-//             })
-//         }
+        // pega a id da aula que acabou de ser clonada
+        function searchLastId(arr, prop) {
 
-//         function clonaReceitasPost(receitaCloneSerial) {
-//             load_url();
-//             console.log(receitaCloneSerial);
-//             $.ajax({
-//                 type: 'POST',
-//                 url: createAulaReceita,
-//                 data: receitaCloneSerial,
-//                 dataType: 'json',
-//                 success: function () {
-//                     swal({
-//                         title: 'Aula clonado com sucesso!',
-//                         text: 'Clone está localizado em Planejar Aulas',
-//                         type: 'success',
-//                         confirmButtonText: "Ok",
-//                     });
-//                 },
-//                 error: function () {
-//                     swal({
-//                         title: "Problemas ao copiar as receitas da aula",
-//                         type: "warning",
-//                         confirmButtonText: "Vish Maria",
-//                         confirmButtonColor: "#DD6B55",
-//                     })
-//                 },
-//             })
-//         }
-//     })
-// })
+            var lastId;
+            for (var i = 0; i < arr.length; i++) {
+                if (!lastId || parseInt(arr[i][prop]) > parseInt(lastId[prop]))
+                    lastId = arr[i];
+            }
+            return lastId;
+        }
+
+        function cloneArray() {
+            var cloneArr = [];
+            $.map(jsonAulaReceita, function (valAulaReceita) {
+                if (valAulaReceita.id_aula == idAula) {
+
+                    // formulario não existe, criando um array serializado vazio
+                    var receitaCloneSerial = $('#idNaoExiste').serializeArray();
+
+                    receitaCloneSerial.push({
+                        name: 'id_receita',
+                        value: valAulaReceita.id_receita
+                    }, {
+                        name: 'quantidade_receita',
+                        value: valAulaReceita.quantidade_receita
+                    }, {
+                        name: 'id_aula',
+                        value: lastId
+                    })
+                    cloneArr.push(receitaCloneSerial);
+                }
+            })
+            return cloneArr;
+        }
+    }
+
+    function clonaReceitasPost(cloneArr) {
+        for (var j = 0; j < cloneArr.length; j++) {
+            $.ajax({
+                type: 'POST',
+                url: createAulaReceita,
+                data: cloneArr[j],
+                dataType: 'json',
+                success: function () {
+                    swal({
+                            title: 'Aula clonado com sucesso!',
+                            text: 'Clone está localizado em Planejar Aulas',
+                            type: 'success',
+                            confirmButtonText: "Ok",
+                        },
+                        location.reload()
+                    );
+                },
+                error: function () {
+                    swal({
+                            title: "Problemas ao copiar as receitas da aula",
+                            type: "warning",
+                            confirmButtonText: "Vish Maria",
+                            confirmButtonColor: "#DD6B55",
+                        },
+                        location.reload()
+                    )
+                }
+            })
+        }
+    }
+})
