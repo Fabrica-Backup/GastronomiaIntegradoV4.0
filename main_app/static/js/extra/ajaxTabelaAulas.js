@@ -45,28 +45,32 @@ function getTabela(jsonAula, jsonReceita, jsonAulaReceita) {
                     // cria as 'td' com os valores da aula E joga as 'td' dentro da 'tr' htmlList (<tr><td>  </td></tr>)
                     $('<td hidden class="id_aula">' + valAula.id_aula + '</td>').appendTo(htmlList);
                     $('<td class="nome_aula">' + valAula.nome_aula + '</td>').appendTo(htmlList);
+                    $('<td class="descricao_aula">' + valAula.descricao_aula + '</td>').appendTo(htmlList);
                     $('<td class="dia_da_aula">' + valAula.data_aula + '</td>').appendTo(htmlList);
                     $('<td class="periodo">' + valAula.periodo_aula + '</td>').appendTo(htmlList);
                     $('<td class="num_receitas">' + countReceitas + '</td>').appendTo(htmlList);
 
                     // joga os botoes detalhes e excluir dentro da 'tr'
                     $(botaoDetalhes).appendTo(htmlList);
-                    $(botaoExcluir).appendTo(htmlList);
 
                     // se aula_agendada = false, a aula NAO ESTA agendada
                     if (valAula.aula_agendada == false) {
+                        $(botaoExcluir).appendTo(htmlList);
                         $(botaoEditar).appendTo(htmlList);
                         $(botaoAgendarAula).appendTo(htmlList);
                         $(htmlList).appendTo('.listaAulasPlanejadas');
                     }
-                    // se aula_agendada = true, aula ESTA planejada
+                    // se aula_agendada = true, aula ESTA AGENDADA
                     if (valAula.aula_agendada == true && valAula.aula_concluida == false) {
+                        $('<td><button type="button" class="btn btn-xs btn-danger excluir_concluida"><i class="fa fa-trash"></i></button></td>').appendTo(htmlList);
+
                         $(botaoAulaConcluida).appendTo(htmlList);
                         $(htmlList).appendTo('.listaAulasAgendadas');
                     }
                     // se aula_agendada = true E se aula_concluida = true, aula ESTA CONCLUIDA
                     if (valAula.aula_agendada == true && valAula.aula_concluida == true) {
                         // .aulaConcluidaList esta localizado em aulas-concluidas.html
+                        $(botaoExcluir).appendTo(htmlList);
                         $(htmlList).appendTo('.aulaConcluidaList');
                     }
                     velhaId = novaId;
@@ -356,7 +360,6 @@ $('#verAula').on('click', '.clonar', function () {
         }
     })
 
-
     function cloneAulaPost(objClone) {
         load_url();
         console.log(objClone)
@@ -378,13 +381,14 @@ $('#verAula').on('click', '.clonar', function () {
                     },
                     error: function () {
                         swal({
-                                title: "Problemas ao clonar aula",
-                                type: "warning",
-                                confirmButtonText: "Vish Maria",
-                                confirmButtonColor: "#DD6B55",
-                            },
-                            location.reload())
-                    },
+                            title: "Problemas ao clonar aula",
+                            type: "warning",
+                            confirmButtonText: "Vish Maria",
+                            confirmButtonColor: "#DD6B55",
+                        }, function () {
+                            location.reload()
+                        })
+                    }
                 })
             }
         );
@@ -445,23 +449,23 @@ $('#verAula').on('click', '.clonar', function () {
                 dataType: 'json',
                 success: function () {
                     swal({
-                            title: 'Aula clonado com sucesso!',
-                            text: 'Clone está localizado em Planejar Aulas',
-                            type: 'success',
-                            confirmButtonText: "Ok",
-                        },
+                        title: 'Aula clonado com sucesso!',
+                        text: 'Clone está localizado em Planejar Aulas',
+                        type: 'success',
+                        confirmButtonText: "Ok",
+                    }, function () {
                         location.reload()
-                    );
+                    });
                 },
                 error: function () {
                     swal({
-                            title: "Problemas ao copiar as receitas da aula",
-                            type: "warning",
-                            confirmButtonText: "Vish Maria",
-                            confirmButtonColor: "#DD6B55",
-                        },
+                        title: "Problemas ao copiar as receitas da aula",
+                        type: "warning",
+                        confirmButtonText: "Vish Maria",
+                        confirmButtonColor: "#DD6B55",
+                    }, function () {
                         location.reload()
-                    )
+                    })
                 }
             })
         }

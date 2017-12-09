@@ -21,7 +21,7 @@ $('.aulas').on('click', '.botaoAulaConcluida', function () {
 
         var ingredienteArr = populaIngredienteArr(receitaArr[0]);
         // Obs: ingredienteArr[0] = array de Ids de ingrediente
-        // Obs: ingredienteArr[1] = array de qtd de ingredientes usados na receita
+        // Obs: ingredienteArr[1] = array de qtd de ingredientes usados numa receita
 
         var qtdEstoque = populaEstoqueArr(ingredienteArr[0]);
 
@@ -105,6 +105,7 @@ function calculos(receitaIdArr, receitaQtdArr, ingredienteIdArr, qtdUsadaArr) {
     function reserva() {
         var reservaArr = pegaQtdReserva();
         var reservaCalculado = calculoReserva();
+        console.log(reservaArr, qtdUsadaArr)
 
         function pegaQtdReserva() {
             var reservaArr = [];
@@ -127,9 +128,9 @@ function calculos(receitaIdArr, receitaQtdArr, ingredienteIdArr, qtdUsadaArr) {
             }
             return reservaCalculado;
         }
-        return reservaCalculado;
+        return [reservaCalculado, reservaArr];
     }
-    return [qtdTotalUsar, reserva];
+    return [qtdTotalUsar, reserva[0], reserva[1]];
 }
 
 function montaJson(idIngredienteArr, qtdTotalUsadaArr, qtdTotalReservadaArr) {
