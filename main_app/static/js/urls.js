@@ -3,16 +3,19 @@
 window.listIngrediente = 'http://localhost:8000/api/ingredientes/list/';
 
 // unidade_medida
-window.listUnidadeMedida = 'http://localhost:8000/api/unidadesmedida/list';
+window.listUnidadeMedida = 'http://localhost:8000/api/unidadesmedida/list/';
 
 // aula
-window.listAula = 'http://localhost:8000/api/aulas/list';
+window.listAula = 'http://localhost:8000/api/aulas/list/';
 
 // receita
-window.listReceita = 'http://localhost:8000/api/receitas/list';
+window.listReceita = 'http://localhost:8000/api/receitas/list/';
 
 // associativa aula_receita
 window.listAulaReceita = 'http://localhost:8000/api/aula_receita/list/';
+
+// associativa receita_ingrediente
+window.listReceitaIngrediente = 'http://localhost:8000/api/receita_ingrediente/list/';
 
 // ========== LIST fim ========== //
 
@@ -33,4 +36,18 @@ function load_url() {
     // ========== AULA RECEITA ========== //
     window.createAulaReceita = 'http://localhost:8000/api/aula_receita/create/';
     window.deleteAulaReceita = 'http://localhost:8000/api/aula_receita/delete/' + idData + '';
+
+    // ========== RECEITA ========== //
+    window.createReceita = 'http://localhost:8000/api/receitas/create/';
+
+    // ========== RECEITA INGREDIENTE ========== //
+    window.createReceitaIngrediente = 'http://localhost:8000/api/receita_ingrediente/create/';
 }
+
+// JSONs ARMAZENDADOS para serem utilizados em todos os lugares
+window.jsonUnidade;
+window.jsonIngrediente;
+window.jsonAula;
+window.jsonReceita;
+window.jsonAulaReceita;
+window.jsonReceitaIngrediente;

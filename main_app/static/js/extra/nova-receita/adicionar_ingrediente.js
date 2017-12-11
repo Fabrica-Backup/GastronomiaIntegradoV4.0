@@ -1,22 +1,26 @@
 $(document).ready(function () {
     var ingredienteArray = [];
+    window.ing = 0;
 
-    $("#novo-ingrediente").click(function (event) {
-        event.preventDefault();
+    $("#novo-ingrediente").click(function () {
 
         limpaMensagens();
         var formAdicionarIngrediente = $('#form-adicionar-ingrediente');
         var ingrediente = obtemIngredienteDoFormulario(formAdicionarIngrediente);
 
-        var htmlLinha = '<tr data-teste="' + ingrediente.id + '" class="ig"><td class="info-nome"><input hidden type="text" name="nome[]" value="' + ingrediente.nome + '" /><p> ' + ingrediente.nome + '</></td><td class="info-quantidade"><input hidden type="text" name="quantidade[]" value="' + ingrediente.quantidade + '" /><p> ' + ingrediente.quantidade + ' </p></td><td class="info-unidade">' + ingrediente.unidade + '</td><td class="botao-excluir">' + ingrediente.excluir + '</td></tr>';
-        
+        var formIng = $('<form class="form_porco_' + ing + '"></form>')
+        var htmlLinha = '<tr data-id="' + ingrediente.id + '" class="ig"><td class="info-nome"><input hidden type="text" name="id_ingrediente" value="' + ingrediente.id + '" /><p> ' + ingrediente.nome + '</p></td><td class="info-quantidade"><input hidden type="text" name="quantidade_bruta_receita_ingrediente" value="' + ingrediente.quantidade + '" /><p> ' + ingrediente.quantidade + ' </p></td><td class="botao-excluir">' + ingrediente.excluir + '</td></tr>';
+
+        $(htmlLinha).appendTo(formIng);
+
         var erros = validaReceita(ingrediente);
 
         if (erros.length > 0) {
             exibeMensagensDeErro(erros);
             return;
         } else {
-            return $(".tabela-ingrediente").append(htmlLinha);
+            ing++
+            return $(".tabela-ingrediente").append(formIng);
         }
     });
 
@@ -31,6 +35,7 @@ $(document).ready(function () {
             }
         }
         $(this).parent().remove();
+        rec--;
     });
 
     // CAPTURA OS DADOS DO FORMULARIO
@@ -44,7 +49,7 @@ $(document).ready(function () {
             id: nomeIngredientes.options[nomeIngredientes.selectedIndex].value,
             nome: nomeIngredientes.options[nomeIngredientes.selectedIndex].text,
             quantidade: document.getElementById("quantidade").value,
-            unidade: document.querySelector("#unidade").textContent,
+            // unidade: document.querySelector("#unidade").textContent,
             excluir: htmlBotao
         }
         return ingrediente;

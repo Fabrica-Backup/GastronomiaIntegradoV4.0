@@ -12,8 +12,6 @@ $('.lista-ingredientes').on('click', '.addButton', function () {
 });
 
 function getThingsSoma() {
-    window.jsonIngrediente;
-    window.jsonUnidade;
     if (typeof jsonIngrediente === 'undefined' || typeof jsonUnidade === 'undefined') {
         $.getJSON(listIngrediente, function (jsonObjectIngrediente) {
             jsonIngrediente = jsonObjectIngrediente;
@@ -122,7 +120,7 @@ function calculaPreco() {
         $('.preco_unitario_atualizado').html('<h5>R$ 0</h5><input type="text" name="valor_ingrediente" value="0" hidden/>');
     } else {
         // calcula e mostra na tela o valor do preco unitario atual
-        var precoUnitarioAtual = (Math.round((qtdIngrediente / precoTotal) * 100) / 100);
+        var precoUnitarioAtual = (Math.round((precoTotal / qtdIngrediente) * 100) / 100);
         var htmlPrecoUnitarioAtual = '<h5>R$ ' + precoUnitarioAtual + ' / ' + unidadeTxt + '</h5><input type="text" name="valor_ingrediente" value="' + precoUnitarioAtual + '" hidden/> ';
         $('.preco_unitario_atualizado').html(htmlPrecoUnitarioAtual);
 
@@ -152,6 +150,9 @@ function postAdd() {
             }, {
                 name: 'aproveitamento_ingrediente',
                 value: '' + valIngrediente.aproveitamento_ingrediente + ''
+            }, {
+                name: 'quantidade_reservada_ingrediente',
+                value: '' + valIngrediente.quantidade_reservada_ingrediente + ''
             })
         }
     })
@@ -289,6 +290,9 @@ function postSub() {
             }, {
                 name: 'valor_ingrediente',
                 value: '' + valIngrediente.valor_ingrediente + ''
+            }, {
+                name: 'quantidade_reservada_ingrediente',
+                value: '' + valIngrediente.quantidade_reservada_ingrediente + ''
             })
         }
     })

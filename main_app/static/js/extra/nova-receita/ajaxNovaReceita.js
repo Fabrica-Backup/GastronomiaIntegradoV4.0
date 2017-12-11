@@ -26,11 +26,11 @@ function mostraClasseCate() {
     //$('#select2').find('option').
     $.each(jsonCategoria, function (indexInCategoria, valueOfCategoria) {
         //var select = $('<select class="form-control select2" style="width: 100%;"></select>')
-        $('#categoria').append("<option>" + valueOfCategoria.descricao_categoria + "</option>");
+        $('#categoria').append("<option value=" + valueOfCategoria.id_categoria + ">" + valueOfCategoria.descricao_categoria + "</option>");
     });
 
     $.each(jsonClassificacao, function (indexInClassificacao, valueOfClassificacao) {
-        $('#classificacao').append("<option>" + valueOfClassificacao.descricao_classificacao + "</option>");
+        $('#classificacao').append("<option value=" + valueOfClassificacao.id_classificacao + ">" + valueOfClassificacao.descricao_classificacao + "</option>");
     });
 }
 
@@ -127,7 +127,7 @@ if (typeof jsonObjectIngrediente === 'undefined' || typeof jsonObjectUnidade ===
         // get da tabela de unidades
         $.getJSON('http://localhost:8000/api/unidadesmedida/list/', function (jsonObjectUnidade) {
             jsonUnidade = jsonObjectUnidade;
-             mostraIngredientes();
+            mostraIngredientes();
         })
     })
 } else {
@@ -138,13 +138,13 @@ if (typeof jsonObjectIngrediente === 'undefined' || typeof jsonObjectUnidade ===
 // Monta a table de ingredientes
 function mostraIngredientes() {
     $.each(jsonIngrediente, function (indexIngrediente, valueOfIngrediente) {
-        
+
         $.each(jsonUnidade, function (indexInUnidade, valueOfUnidade) {
-            
+
             if (valueOfIngrediente.id_unidade_medida == valueOfUnidade.id_unidade_medida) {
-                $('#nomeIngredientes').append("<option>" + valueOfIngrediente.nome_ingrediente + "</option>");
-                $('#unidade').append("<option>" + valueOfUnidade.simbolo_unidade_medida + "</option>");
-                console.log(jsonUnidade);
+                $('#nomeIngredientes').append("<option value=" + valueOfIngrediente.id_ingrediente + ">" + valueOfIngrediente.nome_ingrediente + "</option>");
+
+                // $('#unidade').append("<option>" + valueOfUnidade.simbolo_unidade_medida + "</option>");
             }
         });
     });
