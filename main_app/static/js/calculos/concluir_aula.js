@@ -41,8 +41,7 @@ $('.aulas').on('click', '.botaoAulaConcluida', function () {
 
 // Construtor de serializerArray
 function criaSerialize() {
-    // var concluiAulaSerial = $('#lagumacoisa').serializeArray()
-    var serial = $('#outracoisa').serializeArray();
+    var serial = $('#idNaoExiste').serializeArray();
     return serial;
 }
 
@@ -238,7 +237,7 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial) {
                     data: ingredienteSerialArr[i],
                     dataType: 'json',
                     success: function () {
-                        ajaxAula();
+                        console.log('ingrediente atalizado')
                     },
                     error: function () {
                         swal({
@@ -246,11 +245,14 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial) {
                             type: "error",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#DD6B55",
+                        },function(){
+                            location.reload();
                         })
                     }
                 })
             }
-
+            ajaxAula();
+            
             function ajaxAula() {
                 $.ajax(updateAula, {
                     type: 'POST',
@@ -272,6 +274,8 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial) {
                             type: "error",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#DD6B55",
+                        },function(){
+                            location.reload();
                         })
                     }
                 })

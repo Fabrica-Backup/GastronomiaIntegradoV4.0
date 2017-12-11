@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static '/css/util.css' %}">
     <link rel="stylesheet" href="{% static '/css/sweetalert.css' %}">
     <!-- Select2 -->
-    <link rel="stylesheet" href="{% static '/css/select2.min.css' %}">
+    <!-- <link rel="stylesheet" href="{% static '/css/select2.min.css' %}"> -->
 </head>
 
 <body class="hold-transition skin-green sidebar-mini">
@@ -143,20 +143,20 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Nova Receita</h3>
                         </div>
-                        <form class="form-horizontal">{% csrf_token %}
+                        <form id="formReceita" class="form-horizontal" method="POST">{% csrf_token %}
                             <div class="box-body">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Receita</label>
 
                                     <div class="col-sm-8 input-group">
-                                        <input type="text" class="form-control" id="inputReceita" placeholder="Nome da Receita">
+                                        <input type="text" class="form-control" name="nome_receita" id="inputReceita" placeholder="Nome da Receita">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword3" class="col-sm-3 control-label">Classificação</label>
 
                                     <div class="col-sm-8 input-group">
-                                        <select id="classificacao" class="form-control select2" style="width: 100%;">
+                                        <select name="id_classificacao" id="classificacao" class="form-control select2" style="width: 100%;">
                                             <option value="None" selected="Selected">Selecione a Classificação</option>
                                         </select>
 
@@ -171,7 +171,7 @@
                                     <label for="inputPassword3" class="col-sm-3 control-label">Categoria</label>
 
                                     <div class="col-sm-8 input-group">
-                                        <select id="categoria" class="form-control select2" style="width: 100%;">
+                                        <select name="id_categoria" id="categoria" class="form-control select2" style="width: 100%;">
                                             <option value="None" selected="Selected">Selecione a Categoria</option>
                                         </select>
                                         <div class="input-group-btn">
@@ -197,7 +197,7 @@
                                 </div>
                                 <ul id="mensagens-ing-receita-erro"></ul>
                                 <div class="box-body">
-                                    <form id="form-adicionar-ingrediente" class="form-horizontal">{% csrf_token %}
+                                    <form id="form-adicionar-ingrediente" class="form-horizontal" method="POST">{% csrf_token %}
                                         <div class="form-group">
                                             <label for="inputIngrediente" class="col-sm-1 col-xs-1 control-label"></label>
                                             <div class="row">
@@ -217,9 +217,9 @@
                                                 </div>
 
                                                 <div class="col-xs-1">
-                                                    <select name="unidade" id="unidade" class="form-control" style="width: 120%;">
-                                                        <!-- <option value="None" selected="Selected">Unidade </option> -->
-                                                    </select>
+                                                    <!-- <select name="unidade" id="unidade" class="form-control" style="width: 120%;"> -->
+                                                    <!-- <option value="None" selected="Selected">Unidade </option> -->
+                                                    <!-- </select> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -380,9 +380,9 @@
                 <!-- /right column -->
             </div>
             <div class="box-center">
-                <button type="submit" class="btn btn-default col-md-1 col-md-offset-4">Cancelar</button>
+                <button type="button" class="btn btn-default col-md-1 col-md-offset-4">Cancelar</button>
                 </a>
-                <button type="button" class="btn btn-success col-md-1 col-md-offset-2">Salvar</button>
+                <button type="button" id="salvarReceita" class="btn btn-success col-md-1 col-md-offset-2">Salvar</button>
             </div>
         </section>
     </div>
@@ -400,12 +400,15 @@
     <script src="{% static 'js/app.min.js' %}"></script>
     <script src="{% static 'js/sweetalert.min.js' %}"></script>
     <!-- Select2 -->
-    <script src="{% static 'js/select2.full.min.js' %}"></script>
+    <!-- <script src="{% static 'js/select2.full.min.js' %}"></script> -->
     <script src="{% static 'js/extra/nova-receita/adicionar_ingrediente.js' %}"></script>
-    <!-- <script src="{% static 'js/extra/estoque/validacao_ingrediente.js' %}"></script> -->
-    <!-- <script src="{% static 'js/extra/estoque/add_editar_ingredientes.js' %}"></script> -->
+    <script src="{% static 'js/extra/estoque/validacao_ingrediente.js' %}"></script>
+    <script src="{% static 'js/extra/estoque/add_editar_ingredientes.js' %}"></script>
     <script src="{% static 'js/extra/util.js' %}"></script>
+    <script src="{% static 'js/extra/estoque/unidades.js' %}"></script>
+    <script src="{% static 'js/extra/nova-receita/ajax.js' %}"></script>
 
+    <script src="{% static 'js/urls.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'js/extra/nova-receita/nicEdit.js' %}"></script>
     <script type="text/javascript">
