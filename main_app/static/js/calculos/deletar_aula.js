@@ -19,7 +19,6 @@ $('.listaAulasAgendadas').on('click', '.excluir_concluida', function () {
         var ingredienteArr = populaIngredienteArr(receitaArr[0]);
         var qtdTotalUsada = calculos(receitaArr[0], receitaArr[1], ingredienteArr[0], ingredienteArr[1]);
 
-        // return qtdTotalUsada;
         var reservaFinalArr = calculoDelete(qtdTotalUsada[2], qtdTotalUsada[0]);
         var jsonDelete = montaJsonDelete(reservaFinalArr, ingredienteArr[0]);
 
@@ -82,8 +81,6 @@ $('.listaAulasAgendadas').on('click', '.excluir_concluida', function () {
 
 function ajaxIngredienteDelete(jsonDelete, ingredienteIdArr) {
     var idDataTemp = idData;
-
-
 
     swal({
             title: "Deletar esta aula?",

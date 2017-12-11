@@ -37,7 +37,11 @@ function load_url() {
     window.createAulaReceita = 'http://localhost:8000/api/aula_receita/create/';
     window.deleteAulaReceita = 'http://localhost:8000/api/aula_receita/delete/' + idData + '';
 
+    // ========== RECEITA ========== //
+    window.createReceita = 'http://localhost:8000/api/receitas/create/';
+
     // ========== RECEITA INGREDIENTE ========== //
+    window.createReceitaIngrediente = 'http://localhost:8000/api/receita_ingrediente/create/';
 }
 
 // JSONs ARMAZENDADOS para serem utilizados em todos os lugares

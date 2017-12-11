@@ -10,8 +10,9 @@ function validacao_agenda_aula(ingredienteArr, reservaArr, serialArr) {
         })
     } else {
         mainErros(ingredienteArr, reservaArr, serialArr)
-        marcarAgendamento(idDataTemp);
 
+        // localizado em agendar_aula.js
+        marcarAgendamento(idDataTemp);
     }
 
     function mainErros(ingredienteArr, reservaArr, serialArr) {
