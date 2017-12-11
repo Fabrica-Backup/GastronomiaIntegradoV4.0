@@ -59,7 +59,8 @@
             <!-- Search -->
             <div class="btn-group sidebar-form">
                 <div class="input-group" data-toggle="dropdown">
-                    <input type="text" class="dropdown-toggle form-control" id="myInput" aria-haspopup="true" aria-expanded="false" placeholder="Procurar.." onkeyup="search()">
+                    <input type="text" class="dropdown-toggle form-control" id="myInput" aria-haspopup="true" aria-expanded="false" placeholder="Procurar.."
+                        onkeyup="search()">
                     </input>
                     <span class="input-group-btn">
                         <button type="button" name="search" id="search-btn" class="btn btn-flat">
@@ -145,6 +146,7 @@
                                     <thead>
                                         <tr>
                                             <th>Aula</th>
+                                            <th>Descrição</th>
                                             <th>Dia</th>
                                             <th>Turno</th>
                                             <th>Nº de Receitas</th>
@@ -179,6 +181,7 @@
                                     <thead>
                                         <tr>
                                             <th>Aula</th>
+                                            <th>Descrição</th>
                                             <th>Dia</th>
                                             <th>Turno</th>
                                             <th>Nº de Receitas</th>
@@ -532,7 +535,10 @@
     <script src="{% static '/js/extra/estoque/add_editar_ingredientes.js' %}"></script>
     <script src="{% static '/js/extra/estoque/somar_subtrair.js' %}"></script>
     <script src="{% static '/js/extra/estoque/unidades.js' %}"></script>
-
+    <script src="{% static '/js/calculos/agendar_aula.js' %}"></script>
+    <script src="{% static '/js/calculos/validacao_agendar_aula.js' %}"></script>
+    <script src="{% static '/js/calculos/concluir_aula.js' %}"></script>
+    <script src="{% static '/js/calculos/deletar_aula.js' %}"></script>
 
 </body>
 

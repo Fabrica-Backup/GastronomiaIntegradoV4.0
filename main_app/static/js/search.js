@@ -1,17 +1,15 @@
 // menu drop down nao some quando clickar dentro dele
-$('.dropdown-menu input, .dropdown-menu label, #search-btn').click(function (e) {
+$('.dropdown-menu input, .dropdown-menu label, #search-btn').click(function(e) {
     e.stopPropagation();
 });
 
 // garante que ao selecionar ingredientes, o get dos ingredientes seja feito
 function getIngredientes() {
-    window.jsonIngrediente;
-    window.jsonUnidade;
     if (document.getElementById('filterIng').checked) {
         if (typeof jsonIngrediente === 'undefined' || typeof jsonUnidade === 'undefined') {
-            $.getJSON(listIngrediente, function (jsonObjectIngrediente) {
+            $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
                 jsonIngrediente = jsonObjectIngrediente;
-                $.getJSON(listUnidadeMedida, function (jsonObjectUnidade) {
+                $.getJSON(listUnidadeMedida, function(jsonObjectUnidade) {
                     jsonUnidade = jsonObjectUnidade;
                     search();
                 })
@@ -24,10 +22,9 @@ function getIngredientes() {
 
 // garante que ao selecionar receitas, o get das receitas seja feito
 function getReceitas() {
-    window.jsonReceita;
     if (document.getElementById('filterRec').checked) {
         if (typeof jsonReceita === 'undefined') {
-            $.getJSON(listReceita, function (jsonObjectReceitas) {
+            $.getJSON(listReceita, function(jsonObjectReceitas) {
                 jsonReceita = jsonObjectReceitas;
                 search();
             })
@@ -90,7 +87,7 @@ function search() {
             var botaoAdd = '<td><button type="button" class="btn btn-xs addButton"><i class="fa fa-plus"></i></button></td>';
             var botaoSubtract = '<td><button type="button" class="btn btn-danger btn-xs subButton"><i class="fa fa-minus"></i></button></td>';
 
-            $.each(jsonIngrediente, function (index, value) {
+            $.each(jsonIngrediente, function(index, value) {
                 var valueUpper = value.nome_ingrediente.toUpperCase();
                 if (upper == '') {
                     return;
@@ -104,7 +101,7 @@ function search() {
                     $('<td>' + value.valor_ingrediente + '</td>').appendTo(htmlIngList);
                     $('<td>' + value.quantidade_estoque_ingrediente + '</td>').appendTo(htmlIngList);
 
-                    $.each(jsonUnidade, function (indexUnidade, valUnidade) {
+                    $.each(jsonUnidade, function(indexUnidade, valUnidade) {
                         if (valUnidade.id_unidade_medida == value.id_unidade_medida) {
                             $('<td>' + valUnidade.simbolo_unidade_medida + '</td>').appendTo(htmlIngList);
                         }
@@ -136,7 +133,7 @@ function search() {
             // deixa o valor digitado em caixa alta (para nao ficar case sensitive)
             upper = input.toUpperCase();
 
-            $.each(jsonReceita, function (index, value) {
+            $.each(jsonReceita, function(index, value) {
                 var valueUpper = value.nome_receita.toUpperCase();
                 if (upper == '') {
                     return;
@@ -154,17 +151,15 @@ function search() {
     }
 }
 
-$('#search-btn').on('click', function () {
+$('#search-btn').on('click', function() {
     if (document.getElementById('filterRec').checked) {
-        $.getJSON(listReceita, function (jsonObjectReceitas) {
-            window.jsonReceita;
+        $.getJSON(listReceita, function(jsonObjectReceitas) {
             jsonReceita = jsonObjectReceitas;
             search();
         })
     }
     if (document.getElementById('filterIng').checked) {
-        $.getJSON(listIngrediente, function (jsonObjectIngrediente) {
-            window.jsonIngrediente;
+        $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
             jsonIngrediente = jsonObjectIngrediente;
             search();
         })
