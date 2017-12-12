@@ -15,6 +15,8 @@ function validacao_agenda_aula(ingredienteArr, reservaArr, serialArr) {
         marcarAgendamento(idDataTemp);
     }
 
+
+
     function mainErros(ingredienteArr, reservaArr, serialArr) {
         var erros = validaReserva(ingredienteArr, reservaArr);
 
