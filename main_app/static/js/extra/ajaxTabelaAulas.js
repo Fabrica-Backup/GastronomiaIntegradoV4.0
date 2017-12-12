@@ -189,9 +189,9 @@ $('#addAula').on('click', '#saveButton', function () {
             if (typeof lastAulaInfo === 'undefined') {
                 idData = 0;
             } else {
-                idData = lastAulaInfo.id_aula;
+                idData = lastAulaInfo;
+                idData++;
             }
-            idData++;
             eachReceita();
         } else {
             return editAula();
@@ -205,7 +205,7 @@ $('#addAula').on('click', '#saveButton', function () {
                 if (!lastId || parseInt(arr[i][prop]) > parseInt(lastId[prop]))
                     lastId = arr[i];
             }
-            return lastId;
+            return lastId.id_aula;
         }
     }
 
@@ -247,6 +247,7 @@ $('#addAula').on('click', '#saveButton', function () {
     }
     // serializa o form_muito_porco do html e adiciona a ID da aula, ele da post para cada receita individualmente na associativa
     function eachReceita() {
+        var receitaArr = [];
         console.log(idData, 'id criada')
         for (i = 0; i < rec; i++) {
             var receita = $('.form_muito_porco' + i + '').serializeArray();
@@ -254,43 +255,49 @@ $('#addAula').on('click', '#saveButton', function () {
                 name: 'id_aula',
                 value: '' + idData + ''
             })
-            postReceita(receita);
+            receitaArr.push(receita)
+            // postReceita(receita);
         }
+        postReceita(receitaArr);
     }
 
-    function postReceita(receita) {
-        console.log(receita)
-        $.ajax({
-                type: "POST",
-                url: createAulaReceita,
-                data: receita,
-                dataType: 'json',
-                success: function () {
-                    $('#addAula').modal('hide')
-                    swal({
-                            title: "SUCESSO!",
-                            type: "success",
-                        },
-                        function () {
-                            location.reload();
-                        }
-                    )
-                },
-                error: function () {
-                    swal({
-                            title: "Problemas na inserção das receitas na aula",
-                            type: "error",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: "#DD6B55",
-                        },
-                        function () {
-                            location.reload();
-                        }
-                    )
-                }
-            }
+    function postReceita(receitaArr) {
+        console.log(receitaArr)
 
-        );
+        for (var i = 0; i < receitaArr.length; i++) {
+            $.ajax({
+                    type: "POST",
+                    url: createAulaReceita,
+                    data: receitaArr[i],
+                    dataType: 'json',
+                    success: function () {
+                        $('#addAula').modal('hide')
+                        swal({
+                                title: "SUCESSO!",
+                                type: "success",
+                            },
+                            function () {
+                                location.reload();
+                            }
+                        )
+                    },
+                    error: function () {
+                        swal({
+                                title: "Problemas na inserção das receitas na aula",
+                                type: "error",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: "#DD6B55",
+                            },
+                            function () {
+                                location.reload();
+                            }
+                        )
+                    }
+                }
+
+            );
+        }
+
     }
 });
 
