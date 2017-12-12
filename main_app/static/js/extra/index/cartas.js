@@ -48,7 +48,7 @@ function calculaValores() {
 
         valorEstoque = valorEstoque + valTotalIngrediente;
     })
-    htmlValorEstoque = '<h3>R$ ' + valorEstoque + '</h3>';
+    htmlValorEstoque = '<h3>R$ ' + valorEstoque.toFixed(2) + '</h3>';
     $('.valorEstoque').html(htmlValorEstoque + "<p>Valor do Estoque</p>");
 
 }
