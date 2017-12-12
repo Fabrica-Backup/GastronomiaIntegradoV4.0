@@ -255,7 +255,7 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial, ingredienteIdArr) {
 
             function ajaxAula() {
                 idData = idDataTemp
-                console.log('idData aula, ', idData)
+
                 load_url();
                 $.ajax(updateAula, {
                     type: 'POST',
@@ -267,7 +267,7 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial, ingredienteIdArr) {
                                 type: "success",
                             },
                             function () {
-                                location.reload();
+                                location.reload(true);
                             }
                         )
                     },
@@ -278,7 +278,7 @@ function ajaxConcluirAula(ingredienteSerialArr, aulaSerial, ingredienteIdArr) {
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#DD6B55",
                         }, function () {
-                            location.reload();
+                            location.reload(true);
                         })
                     }
                 })

@@ -119,7 +119,7 @@ function postRecIngrediente(lastId) {
                             type: "success"
                         },
                         function () {
-                            location.reload();
+                            location.reload(true);
                         }
                     )
                 },

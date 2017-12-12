@@ -127,7 +127,7 @@ $('#addAula').on('click', '#saveButton', function () {
                         confirmButtonColor: "#DD6B55",
                     },
                     function () {
-                        location.reload();
+                        location.reload(true);
                     }
                 )
             }
@@ -256,7 +256,6 @@ $('#addAula').on('click', '#saveButton', function () {
                 value: '' + idData + ''
             })
             receitaArr.push(receita)
-            // postReceita(receita);
         }
         postReceita(receitaArr);
     }
@@ -277,7 +276,7 @@ $('#addAula').on('click', '#saveButton', function () {
                                 type: "success",
                             },
                             function () {
-                                location.reload();
+                                location.reload(true);
                             }
                         )
                     },
@@ -289,7 +288,7 @@ $('#addAula').on('click', '#saveButton', function () {
                                 confirmButtonColor: "#DD6B55",
                             },
                             function () {
-                                location.reload();
+                                location.reload(true);
                             }
                         )
                     }
@@ -328,7 +327,9 @@ $('.aulas').on('click', '.excluir', function () {
                             title: "Aula removido com sucesso!",
                             type: "success",
                         }),
-                        $(thisTr).remove();
+                        function () {
+                            location.reload(true);
+                        }
                 },
                 error: function () {
                     swal({
@@ -461,7 +462,7 @@ $('#verAula').on('click', '.clonar', function () {
                         type: 'success',
                         confirmButtonText: "Ok",
                     }, function () {
-                        location.reload()
+                        location.reload(true)
                     });
                 },
                 error: function () {
@@ -471,7 +472,7 @@ $('#verAula').on('click', '.clonar', function () {
                         confirmButtonText: "Vish Maria",
                         confirmButtonColor: "#DD6B55",
                     }, function () {
-                        location.reload()
+                        location.reload(true)
                     })
                 }
             })
