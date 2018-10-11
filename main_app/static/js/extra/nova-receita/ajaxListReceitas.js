@@ -112,23 +112,39 @@ function excluir_receita(idData, thisTr) {
 
 // ============== VISUALIZAR RECEITA DETALHES =================== //
 
-
-$.getJSON("url", data,
-    function (data, textStatus, jqXHR) {
-
-    }
-);
-
-$("#visualizar").click(function (e) { 
-    e.preventDefault();
-    $("#receitaId").modal('show');    
+$('.lista-receita').on('click', '#visualizar', function () {
+    // seleciona a 'tr' da receita especifico
+    var thisTr = $(this).closest('tr');
+    // pega a id da receita localizado no html
+    var idData = thisTr.data('id');
+    detalhe_receita(idData, thisTr);
 });
-// function viewReceita () {
-//     $.getJSON("url", data,
-//         function (data, textStatus, jqXHR) {
+
+function detalhe_receita(idData, thisTrid) { 
+    //var nomeReceita = idData.nome_receita;
+   // $("#receitaId").modal('show');
+   
+
+
+
+   console.log(idData);
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8000/api/receitas/list/" + '',
+        data:  {
+            "id_receita": idData
+        },
+        dataType: "JSON",
+        success: function () {
+            $("#modal-header").append($('<h4 class="modal-title" id="modelTitleId">'+ idData.nome_receita +'</h4>'));
+            console.log(nome_receita);
+
             
-//         }
-//     );
-// }
+        }
+    });
+   
+   //$('#modelTitleId').html(nomeReceita);
+   
+}
 
 // ===================== EDITAR RECEITA ======================== //
