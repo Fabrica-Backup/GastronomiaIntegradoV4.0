@@ -1,11 +1,11 @@
 // ==================== GET ===================== //
 // get da tabela de ingredientes
 if (typeof jsonIngrediente === 'undefined' || typeof jsonObjectUnidade === 'undefined') {
-    $.getJSON(listIngrediente, function(jsonObjectIngrediente) {
+    $.getJSON(listIngrediente, function (jsonObjectIngrediente) {
         jsonIngrediente = jsonObjectIngrediente;
 
         // get da tabela de unidades
-        $.getJSON(listUnidadeMedida, function(jsonObjectUnidade) {
+        $.getJSON(listUnidadeMedida, function (jsonObjectUnidade) {
             jsonUnidade = jsonObjectUnidade;
             mostraIngredientes();
         })
@@ -22,9 +22,9 @@ function mostraIngredientes() {
     var botaoEditar = '<td><button class="editar" type="button">Editar</button></td>';
 
     // roda a lista de ingredientes
-    $.each(jsonIngrediente, function(indexIngrediente, valIngrediente) {
+    $.each(jsonIngrediente, function (indexIngrediente, valIngrediente) {
         // roda a lista de unidades
-        $.each(jsonUnidade, function(indexUnidade, valUnidade) {
+        $.each(jsonUnidade, function (indexUnidade, valUnidade) {
             // compara as id de unidade das tabelas ingredientes e unidade e armazena a key 'descricao' da tabela unidade na variavel unidade
             if (valUnidade.id_unidade_medida == valIngrediente.id_unidade_medida) {
 
@@ -37,6 +37,7 @@ function mostraIngredientes() {
                 $('<td class="aproveitamento">' + valIngrediente.aproveitamento_ingrediente + '</td>').appendTo(htmlList);
                 $('<td class="valor_ingrediente"> R$ ' + valIngrediente.valor_ingrediente + '</td>').appendTo(htmlList);
                 $('<td class="quantidade_estoque">' + valIngrediente.quantidade_estoque_ingrediente + '</td>').appendTo(htmlList);
+                $('<td class="quantidade_reservada">' + valIngrediente.quantidade_reservada_ingrediente + '</td>').appendTo(htmlList);
                 $('<td class="unidade_medida">' + valUnidade.simbolo_unidade_medida + '</td>').appendTo(htmlList);
                 $(botaoAdd).appendTo(htmlList);
                 $(botaoSubtract).appendTo(htmlList);
@@ -66,7 +67,7 @@ function postJson() {
     } else {
         var urlData = updateIngrediente;
 
-        $.each(jsonIngrediente, function(indexIngrediente, valIngrediente) {
+        $.each(jsonIngrediente, function (indexIngrediente, valIngrediente) {
             if (valIngrediente.id_ingrediente == idData) {
                 formArray.push({
                     name: 'valor_ingrediente',
@@ -84,26 +85,26 @@ function postJson() {
         url: urlData,
         dataType: "json",
         data: formArray,
-        success: function() {
+        success: function () {
             $('.aulas').modal("hide");
             swal({
                     title: "Sucesso!",
                     text: "Ingrediente incluido com sucesso!",
                     type: "success"
                 },
-                function() {
+                function () {
                     location.reload();
                 }
             )
         },
-        error: function() {
+        error: function () {
             $('#mensagens-erro').append('Problemas no cadastro do ingrediente');
         }
     });
 };
 
 // ===================== DELETE ===================== //
-$('.lista-ingredientes').on('click', '.excluir_ing', function() {
+$('.lista-ingredientes').on('click', '.excluir_ing', function () {
     // seleciona a 'tr' do ingrediente especifico
     var thisTr = $(this).closest('tr');
     // pega a id do ingrediente localizado no html
@@ -111,7 +112,7 @@ $('.lista-ingredientes').on('click', '.excluir_ing', function() {
     excluir_ingrediente(thisTr);
 });
 
-$('#listaSearch').on('click', '.excluir_ing', function() {
+$('#listaSearch').on('click', '.excluir_ing', function () {
     // seleciona a 'tr' do ingrediente especifico
     var thisTr = $(this).closest('tr');
     // pega a id do ingrediente localizado no html
@@ -129,14 +130,14 @@ function excluir_ingrediente(thisTr) {
             confirmButtonText: "Deletar!",
             closeOnConfirm: false,
         },
-        function() {
+        function () {
             $.ajax(deleteIngrediente, {
                 type: 'DELETE',
                 data: {
                     "id_ingrediente": idData
                 },
                 dataType: 'json',
-                success: function() {
+                success: function () {
                     swal({
                             title: "Ingrediente removido com sucesso!",
                             type: "success",
@@ -144,7 +145,7 @@ function excluir_ingrediente(thisTr) {
                         // remove o ingrediente da lista no html
                         $(thisTr).remove();
                 },
-                error: function() {
+                error: function () {
                     swal({
                         title: "Problemas ao remover o ingrediente",
                         type: "error",

@@ -181,18 +181,25 @@ $('#addAula').on('click', '#saveButton', function () {
 
     // Adiciona todas as Receitas da aula
     function aulaReceita_control() {
+
+        listAula = null;
+        $.getJSON(listAula, function (jsonObjectAula) {
+            jsonAula = jsonObjectAula;
+        })
+
         // se estiver criando aula idData == 0, vai buscar a id dessa aula para adicionar as receitas
         if (idData == 0) {
             // imagina que, var lastAulaInfo = lastId;
             var lastAulaInfo = searchLastId(jsonAula, 'id_aula');
 
             if (typeof lastAulaInfo === 'undefined') {
-                idData = 0;
+                idData = 1;
             } else {
                 idData = lastAulaInfo;
                 idData++;
+                var idDataTemp = idData;
             }
-            eachReceita();
+            eachReceita(idDataTemp);
         } else {
             return editAula();
         }
@@ -210,8 +217,9 @@ $('#addAula').on('click', '#saveButton', function () {
     }
 
     function editAula() {
-
         idData = $('#form_addAula').find('.id_aula').val();
+        // var idDataTemp = idData;
+
         var aulaSerialized = $('#form_addAula').serializeArray();
         load_url();
         aulaSerialized.push({
@@ -229,7 +237,7 @@ $('#addAula').on('click', '#saveButton', function () {
             dataType: 'json',
             success: function () {
                 console.log('editou aula');
-                eachReceita(idData);
+                eachReceita();
             },
             error: function () {
                 swal({
@@ -246,17 +254,18 @@ $('#addAula').on('click', '#saveButton', function () {
         });
     }
     // serializa o form_muito_porco do html e adiciona a ID da aula, ele da post para cada receita individualmente na associativa
-    function eachReceita() {
+    function eachReceita(idDataTemp) {
         var receitaArr = [];
-        console.log(idData, 'id criada')
+
         for (i = 0; i < rec; i++) {
             var receita = $('.form_muito_porco' + i + '').serializeArray();
             receita.push({
                 name: 'id_aula',
-                value: '' + idData + ''
+                value: '' + idDataTemp + ''
             })
             receitaArr.push(receita)
         }
+        console.log(receitaArr)
         postReceita(receitaArr);
     }
 

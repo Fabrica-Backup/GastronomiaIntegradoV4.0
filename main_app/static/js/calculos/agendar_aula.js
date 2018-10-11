@@ -129,6 +129,7 @@ function montaJsonAgenda(ingredienteArr, reservaArr, serialArr) {
     return arr;
 }
 
+// localizado em /calculos/validacao_agendar_aula.js
 function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
     var jsonMontado = montaJsonAgenda(ingredienteArr, reservaArr, serialArr);
     var idDataTemp = idData;
@@ -138,7 +139,7 @@ function ajaxIngrediente(ingredienteArr, reservaArr, serialArr) {
         idData = ingredienteArr[i];
 
         load_url();
-        console.log(updateIngrediente)
+        console.log(jsonMontado[1])
 
         $.ajax({
             type: "POST",
